@@ -1,12 +1,4 @@
-# vue-phaser3
-
-#### Webpack boilerplate that integrates Phaser 3 into a Vue 3 project.
-
-This project template has been set up using the **Vue CLI 5** and includes:
-* *Sass*
-* *CSS Postprocessing*
-* *Babel*
-* *Source Minification*
+# phaser-demo
 
 ## Build Setup
 
@@ -24,43 +16,67 @@ npm run build
 npm start
 ```
 
-## Extending the project to your needs
+## Functionality
 
-If you want to add more features like *linting*, *unit testing* or *Typescript* to
-your own project, you can do so quite easily via Vue CLI's plugin system. Read
-the <a href="https://cli.vuejs.org/guide/" target="_blank">documentation</a>
-if you want to know more.
+Loads a sprite up that can xray.
 
-## Converting into your own repository
+Also demonstrates the ability to collect 10 tokens (by clicking underwear) and then having a subsequent underwear become
+visible.
 
-If you want to maintain your own repo based on this boilerplate, you first need
-to detach it from this repo. Here is what you need to do:
+So I build the means to build phaser stories really quickly with xray, collection, etc
 
-1. edit these files and enter your own project info
-	* *package.json*
-	* *README.md*
-	* *public/index.html*
+I didn't reuse anything but an empty boilerplate that had the brainfuck of getting it "just right" in vue instead of
+flat html (more on that later, -optimizations with webpack)
 
-2. delete *LICENSE* (and perhaps add your own)
+I added in Tailwind css and tested out some editor stuff.
 
-3. reinitialize git
-<pre><code>rm -rf .git
-git init
-git add .
-git commit -m "Initial commit"
-</code></pre>
+The end goal is a visual editor (no code) that you can set up scenes with and have simple logical decisions. From what I
+coded out you could feasibly make a pokemon type collect clone.
 
-## Sharing data between Vue and Phaser
+You could even have player health by having the palyer collect damage tokens by clicking the wrong thing.
 
-You might want to expose some game state that lives inside of your Phaser code
-to your Vue components and vice versa, for example a highscore. Here are two
-ways you can achieve sharing state between the frameworks.
+use the above to run it, a girl should appear. you can mouse over her pants to xray and then click them 6 times to make
+them vanish and then again
 
-* Import a Phaser <a href="https://photonstorm.github.io/phaser3-docs/Phaser.Events.EventEmitter.html" target="_blank">EventEmitter</a> instance in
-both your Vue components and Phaser modules. Both sides can then listen to and
-emit events on that emitter.
+check `dtos.ts` though for the ideas the end product will have
 
-* Have both sides share a <a href="https://pinia.vuejs.org/introduction.html" target="_blank">
-Pinia</a> store instance. It works like an event emitter, but can also hold
-state. The Pinia store is nicely integrated into your Vue components and is easily
-accessible on the Phaser side by applying the *useStore* hook.
+conditions are in response to input or the scene loading or text being displayed
+
+Results are ways to change the game state. Update a character piece (like the face)
+
+Have ten tokens (condition?) add sprite.
+
+Sprites have click logic (on click, on hover, on mouse out) // more to come
+
+I minimally implemented a few examples and created xray and a declother 
+
+```typescript
+export class GameScene
+{
+    public frames: Frame[];
+    public project: Project;
+    public scene: Scene;
+    public spriteSheets: SpriteSheet[];
+    public addCharacterPieceGroupResults: AddCharacterPieceGroupResult[];
+    public updateCharacterPieceGroupResults: UpdateCharacterPieceGroupResult[];
+    public removeCharacterPieceGroupResults: RemoveCharacterPieceGroupResult[];
+    public characterPieceSpriteSheetReferences: CharacterPieceSpriteSheetReference[];
+    public characters: Character[];
+    public spriteSheetRefs: SpriteSheetRef[];
+    public spriteSheetRefResults: SpriteSheetRefResult[];
+    public movesToFrameResult: MovesToFrameResult[];
+    public masksImageResult: MasksImageResult[];
+    public mouseSwipeCondition: MouseSwipeCondition[];
+    public mouseHoverCondition: MouseHoverCondition[];
+    public clickConditions: ClickCondition[];
+    public inventoryClickCondition: InventoryClickCondition[];
+    public spot: Spot[];
+    public sceneStartCondition: SceneStartCondition[];
+    public frameStartConditions: FrameStartCondition[];
+    public gameItems: Item[];
+
+    public constructor(init?: Partial<GameScene>) { (Object as any).assign(this, init); }
+}
+
+
+```

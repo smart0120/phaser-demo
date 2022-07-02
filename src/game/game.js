@@ -1,7 +1,7 @@
 import Phaser from 'phaser'
 import BootScene from "@/game/scenes/BootScene";
 import PlayScene from "@/game/scenes/PlayScene";
-
+import PlayScene2 from "@/game/scenes/PlayScene2";
 
 
 const sceneConfig = '@/game/scenes/index';
@@ -20,7 +20,7 @@ function launch(containerId) {
                 debug: false
             }
         },
-        scene:  [BootScene, PlayScene]
+        scene:  [BootScene, PlayScene,PlayScene2]
     })
 }
 

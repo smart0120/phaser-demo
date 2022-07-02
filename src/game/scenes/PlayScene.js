@@ -84,22 +84,39 @@ export default class PlayScene extends Scene {
     }
 
     create() {
-
+        this.add.image(900,500,'bg_1FECorridor_5')
         this.createJacklyn_Naked1Group()
+        this.create_panty_rectangle();
+        // this.tweens.add({
+        //
+        //     targets: rectangle,
+        //     angle: 90,
+        //     yoyo: true,
+        //     repeat: -1,
+        //     ease: 'Sine.easeInOut'
+        //
+        // });
+        const rectangle = this.add.rectangle(100, 600, 125, 50, 0xff66ff, .2);
+        rectangle.setInteractive()
+        rectangle.on('pointerup', (pointer) => {
+            this.scene.start('PlayScene2')
+        })
+         this.tweens.add({
 
+             targets: rectangle,
+             angle: 90,
+             yoyo: true,
+             repeat: -1,
+             ease: 'Sine.easeInOut'
+
+         });
+    }
+
+    create_panty_rectangle() {
         const rectangle = this.add.rectangle(500, 600, 125, 50, 0xff66ff, 0);
         rectangle.setInteractive()
         rectangle.on('pointerup', (pointer) => {
-            const annoy_tokens = store.getters.GetInventory(1)
-            if (annoy_tokens.item_stats.itemCount >= 6 && annoy_tokens.item_stats.itemCount <= 6) {
-                if (this.characters[GroupName]['Jacklyn_naked1_bottom1'].visible) {
-                    this.characters[GroupName]['Jacklyn_naked1_bottom1'].visible = false;
-                    store.commit('IncreaseInventory', {itemId: 3, amount: 1}) //got panty
-                }
-            }
-            if (annoy_tokens.item_stats.itemCount >= 0 && annoy_tokens.item_stats.itemCount <= 5) {
-                store.commit('IncreaseInventory', {itemId: 1, amount: 1}) //panty attempt
-            }
+            this.panty_rectangle_pointer_check();
         })
 
         rectangle.on('pointerover', (pointer) => {
@@ -110,16 +127,21 @@ export default class PlayScene extends Scene {
 
 
         });
-        // this.tweens.add({
-        //
-        //     targets: rectangle,
-        //     angle: 90,
-        //     yoyo: true,
-        //     repeat: -1,
-        //     ease: 'Sine.easeInOut'
-        //
-        // });
+        this.panty_rectangle_pointer_check();
+    }
 
+    panty_rectangle_pointer_check() {
+        debugger
+        const annoy_tokens = store.getters.GetInventory(1)
+        if (annoy_tokens.item_stats.itemCount >= 6 ) {
+            if (this.characters[GroupName]['Jacklyn_naked1_bottom1'].visible) {
+                this.characters[GroupName]['Jacklyn_naked1_bottom1'].visible = false;
+                store.commit('IncreaseInventory', {itemId: 3, amount: 1}) //got panty
+            }
+        }
+        if (annoy_tokens.item_stats.itemCount >= 0 && annoy_tokens.item_stats.itemCount <= 5) {
+            store.commit('IncreaseInventory', {itemId: 1, amount: 1}) //panty attempt
+        }
     }
 
     update() {

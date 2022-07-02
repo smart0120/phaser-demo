@@ -87,7 +87,7 @@ export default class PlayScene extends Scene {
 
         this.createJacklyn_Naked1Group()
 
-        const rectangle = this.add.rectangle(500, 600, 125, 50, 0xff66ff, .1);
+        const rectangle = this.add.rectangle(500, 600, 125, 50, 0xff66ff, 0);
         rectangle.setInteractive()
         rectangle.on('pointerup', (pointer) => {
             const annoy_tokens = store.getters.GetInventory(1)

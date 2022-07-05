@@ -1,148 +1,275 @@
 import {Scene} from 'phaser'
-import {GroupName} from "@/game/assets/characters/jacklyn_naked1";
+
 import {store} from "@/store";
 
 
 export default class PlayScene extends Scene {
 
+    SceneName = '';
+    SceneId = 2;
+    SceneLogic;
 
-    constructor() {
-        super({key: 'PlayScene'})
+    constructor(sceneName = 'PlayScene', SceneId = 2) {
+        super({key: sceneName})
+        this.SceneName = sceneName;
+        this.SceneLogic = store.getters.GetCurrentScene()
 
     }
 
+    Rules = {
+        SpriteMouseOutRules: {},
+        SpriteMouseOverRules: {},
+        SpriteMouseClickRules: {},
+        RectangleMouseClickRules: {},
+        RectangleMouseOutRules: {},
+        RectangleMouseOverRules: {},
+        SceneRules: []
+    }
 
     characters = {};
 
-    OnSpriteClick(sprite, pointer, name, groupName) {
-
-        if (name === 'Jacklyn_naked1_bottom2') {
-
-            // const annoy_tokens = store.getters.GetInventory(0)
-            // if (annoy_tokens.item_stats.itemCount >= 6 && annoy_tokens.item_stats.itemCount <= 6) {
-            //     if (sprite.visible) {
-            //         sprite.visible = false;
-            //     }
-            // }
-            // if (annoy_tokens.item_stats.itemCount >= 0 && annoy_tokens.item_stats.itemCount <= 5) {
-            //     store.commit('IncreaseInventory', {itemId: 0, amount: 1})
-            // }
+    onSceneCreate() {
+        for (let rule of this.SceneRules) {
+            if (this.applySceneRule(rule, this.SceneName, this.SceneId)) return;
         }
     }
 
-    OnSpriteOut(sprite, pointer, name, groupName) {
-        if (name === 'Jacklyn_naked1_bottom1') {
-
-            sprite.alpha = 1
-        }
-        if (name === 'Jacklyn_naked1_bottom2') {
-
-            sprite.alpha = 1;
+    onRectangleClick(rect, pointer, name, rectangleId) {
+        const rules = this.Rules.RectangleMouseClickRules[rectangleId];
+        if (!rules) return;
+        for (let rule of rules) {
+            if (this.applyRectangleRule(rule, rect, pointer, name, rectangleId)) break;
         }
     }
 
-    OnSpriteOver(sprite, pointer, name, groupName) {
+    OnRectangleOut(rect, pointer, name, rectangleId) {
+        const rules = this.Rules.RectangleMouseOutRules[rectangleId];
+        if (!rules) return;
+        for (let rule of rules) {
+            if (this.applyRectangleRule(rule, rect, pointer, name, rectangleId)) break;
+        }
+    }
 
-        if (name === 'Jacklyn_naked1_bottom1') {
+    OnRectangleOver(rect, pointer, name, rectangleId) {
+        const rules = this.Rules.RectangleMouseOverRules[rectangleId];
+        if (!rules) return;
+        for (let rule of rules) {
+            if (this.applyRectangleRule(rule, rect, pointer, name, rectangleId)) break;
+        }
+    }
 
-            if (sprite.alpha > .2) {
-                sprite.alpha -= .1
+    OnSpriteClick(sprite, pointer, name, spriteId, groupName) {
+
+        const rules = this.Rules.SpriteMouseClickRules[spriteId];
+        if (!rules) return;
+        for (let rule of rules) {
+            if (this.applySpriteRule(rule, sprite, pointer, name, spriteId, groupName)) break;
+        }
+    }
+
+    applySceneRule(rule, scene, name, sceneId) {
+        try {
+            const Result = rule.applyRule(scene, name, sceneId);
+            if (Result) {
+                rule.applyResults(scene, name, sceneId);
+                if (rule.EndEvaluationOnTrue) {
+                    return true;
+                }
+            } else {
+                if (rule.EndEvaluationOnFalse) {
+                    return true;
+                }
             }
+        } catch (e) {
+            console.log(e);
+            return true;
         }
-        if (name === 'Jacklyn_naked1_bottom2') {
+        return false;
+    }
 
-            if (sprite.alpha > .2) {
-                sprite.alpha -= .1
+    applyRectangleRule(rule, rectangle, pointer, name, rectangleId) {
+        try {
+            const Result = rule.applyRule(rectangle, pointer, name, rectangleId);
+            if (Result) {
+                rule.applyResults(rectangle, pointer, name, rectangleId);
+                if (rule.EndEvaluationOnTrue) {
+                    return true;
+                }
+            } else {
+                if (rule.EndEvaluationOnFalse) {
+                    return true;
+                }
             }
+        } catch (e) {
+            console.log(e);
+            return true;
+        }
+        return false;
+    }
+
+    applySpriteRule(rule, sprite, pointer, name, spriteId, groupId) {
+        try {
+            const Result = rule.applyRule(sprite, pointer, name, spriteId, groupId);
+            if (Result) {
+                rule.applyResults(sprite, pointer, name, spriteId, groupId);
+                if (rule.EndEvaluationOnTrue) {
+                    return true;
+                }
+            } else {
+                if (rule.EndEvaluationOnFalse) {
+                    return true;
+                }
+            }
+        } catch (e) {
+            console.log(e);
+            return true;
+        }
+        return false;
+    }
+
+    OnSpriteOut(sprite, pointer, name, spriteId, groupId) {
+        const rules = this.Rules.SpriteMouseOutRules[spriteId];
+        if (!rules) return;
+
+        for (let rule of rules) {
+            if (this.applySpriteRule(rule, sprite, pointer, name, spriteId, groupId)) break;
+        }
+
+
+    }
+
+    OnSpriteOver(sprite, pointer, name, spriteId, groupId) {
+
+        const rules = this.Rules.SpriteMouseOverRules[spriteId];
+        if (!rules) return;
+
+        for (let rule of rules) {
+            if (this.applySpriteRule(rule, sprite, pointer, name, spriteId, groupId)) break;
         }
     }
 
-    createJacklyn_Naked1Group() {
-        const {Items, GroupName, Scale, Alpha, X, Y} = require("@/game/assets/characters/jacklyn_naked1")
-        this.characters[GroupName] = {};
-        for (let name of Items()) {
-
-            let sprite = this.add.sprite(X, Y, name);
-
-            sprite.setInteractive();
-            sprite.scale = Scale;
-            sprite.alpha = Alpha
-            sprite.on('pointerout', (pointer) => {
-                this.OnSpriteOut(sprite, pointer, name, GroupName)
-            })
-            sprite.on('pointerover', (pointer) => {
-
-                this.OnSpriteOver(sprite, pointer, name, GroupName)
-            });
-            sprite.on('pointerup', (pointer) => {
-
-                this.OnSpriteClick(sprite, pointer, name, GroupName)
-            });
-            this.characters[GroupName][name] = sprite;
+    createSpriteGroup(Items, GroupName, Scale, Alpha, X, Y, GroupId) {
+        this.characters[GroupId] = {};
+        for (let item of Items()) {
+            this.createSprite(item, X, Y, Scale, Alpha, GroupId);
         }
+    }
+
+    createSprite(item, X, Y, Scale, Alpha, GroupId) {
+        let {Name, Id} = item;
+        let sprite = this.add.sprite(X, Y, Name);
+
+        sprite.setInteractive();
+        sprite.scale = Scale;
+        sprite.alpha = Alpha
+        sprite.on('pointerout', (pointer) => {
+            this.OnSpriteOut(sprite, pointer, Name, Id, GroupId)
+        })
+        sprite.on('pointerover', (pointer) => {
+
+            this.OnSpriteOver(sprite, pointer, Name, Id, GroupId)
+        });
+        sprite.on('pointerup', (pointer) => {
+
+            this.OnSpriteClick(sprite, pointer, Name, Id, GroupId)
+        });
+        this.characters[GroupId][Id] = sprite;
+    }
+
+    createSpriteSheet(item, X, Y, Scale, Alpha, frameStart, frameEnd, fps, repeat) {
+        let {Name, Id} = item;
+
+
+        this.anims.create({
+            key: Name,
+            frames: this.anims.generateFrameNumbers(Name, {start: frameStart, end: frameEnd}),
+            frameRate: fps,
+            repeat: repeat
+        });
+        const sprite = this.add.sprite(400, 300, Name)
+        sprite.play('explodeAnimation');
+        sprite.setInteractive();
+        sprite.scale = Scale;
+        sprite.alpha = Alpha
+        sprite.on(Phaser.Animations.Events.ANIMATION_START, function (anim, frame, gameObject) {
+
+
+        });
+        sprite.on(Phaser.Animations.Events.ANIMATION_STOP, function (anim, frame, gameObject) {
+
+
+        });
+
+        sprite.on(Phaser.Animations.Events.ANIMATION_UPDATE, function (anim, frame, gameObject) {
+
+
+        });
+
+        sprite.on(Phaser.Animations.Events.ANIMATION_REPEAT, function (anim, frame, gameObject) {
+
+
+        });
+
+        sprite.on(Phaser.Animations.Events.ANIMATION_COMPLETE, function (anim, frame, gameObject) {
+
+
+        });
+        sprite.on('pointerout', (pointer) => {
+            this.OnSpriteOut(sprite, pointer, Name, Id, GroupId)
+        })
+        sprite.on('pointerover', (pointer) => {
+
+            this.OnSpriteOver(sprite, pointer, Name, Id, GroupId)
+        });
+        sprite.on('pointerup', (pointer) => {
+
+            this.OnSpriteClick(sprite, pointer, Name, Id, GroupId)
+        });
+        this.Animations[Id] = sprite;
+    }
+
+
+    createRectangle(RectangleId, Name, X, Y, Width, Height, FillColor, Alpha, TweenEffect) {
+        const rectangle = this.add.rectangle(X, Y, Width, Height, FillColor, Alpha);
+        rectangle.setInteractive()
+        rectangle.on('pointerup', (pointer) => {
+            this.onRectangleClick(rectangle, pointer, "RoomExit", RectangleId);
+        })
+
+        rectangle.on('pointerover', (pointer) => {
+            this.OnRectangleOver(rectangle, pointer, "RoomExit", RectangleId);
+
+        });
+        rectangle.on('pointerout', (pointer) => {
+            this.OnRectangleOut(rectangle, pointer, "RoomExit", RectangleId);
+
+        });
+        if (TweenEffect)
+            switch (TweenEffect) {
+                case 1:
+                    this.tweens.add({
+
+                        targets: rectangle,
+                        angle: 90,
+                        yoyo: true,
+                        repeat: -1,
+                        ease: 'Sine.easeInOut'
+
+                    });
+                    break;
+            }
 
     }
 
     create() {
-        this.add.image(900,500,'bg_1FECorridor_5')
-        this.createJacklyn_Naked1Group()
-        this.create_panty_rectangle();
-        // this.tweens.add({
-        //
-        //     targets: rectangle,
-        //     angle: 90,
-        //     yoyo: true,
-        //     repeat: -1,
-        //     ease: 'Sine.easeInOut'
-        //
-        // });
-        const rectangle = this.add.rectangle(100, 600, 125, 50, 0xff66ff, .2);
-        rectangle.setInteractive()
-        rectangle.on('pointerup', (pointer) => {
-            this.scene.start('PlayScene2')
-        })
-         this.tweens.add({
 
-             targets: rectangle,
-             angle: 90,
-             yoyo: true,
-             repeat: -1,
-             ease: 'Sine.easeInOut'
+        this.onSceneCreate();
 
-         });
+
+
+
     }
 
-    create_panty_rectangle() {
-        const rectangle = this.add.rectangle(500, 600, 125, 50, 0xff66ff, 0);
-        rectangle.setInteractive()
-        rectangle.on('pointerup', (pointer) => {
-            this.panty_rectangle_pointer_check();
-        })
-
-        rectangle.on('pointerover', (pointer) => {
-
-
-        });
-        rectangle.on('pointerout', (pointer) => {
-
-
-        });
-        this.panty_rectangle_pointer_check();
-    }
-
-    panty_rectangle_pointer_check() {
-        debugger
-        const annoy_tokens = store.getters.GetInventory(1)
-        if (annoy_tokens.item_stats.itemCount >= 6 ) {
-            if (this.characters[GroupName]['Jacklyn_naked1_bottom1'].visible) {
-                this.characters[GroupName]['Jacklyn_naked1_bottom1'].visible = false;
-                store.commit('IncreaseInventory', {itemId: 3, amount: 1}) //got panty
-            }
-        }
-        if (annoy_tokens.item_stats.itemCount >= 0 && annoy_tokens.item_stats.itemCount <= 5) {
-            store.commit('IncreaseInventory', {itemId: 1, amount: 1}) //panty attempt
-        }
-    }
 
     update() {
     }

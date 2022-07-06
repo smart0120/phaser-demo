@@ -12,152 +12,138 @@ import {
     SpriteSheetRefResult
 } from "@/dtos.js";
 
+const EQuestState = {
+    'Started': 0,
+    'Completed': 0,
+    'Failed': 0,
+
+}
+
+export class QuestState {
+    QuestId = ''
+    QuestParameters = {}
+
+    constructor(options = {QuestId: '', QuestState: EQuestState.Failed}) {
+        Object.assign(this, options);
+    }
+
+    QuestState = EQuestState.Started
+
+
+}
+
+export class PlayerGameSave extends PlayerSave {
+    QuestStates = [new QuestState({QuestId: "Default", QuestState: EQuestState.Started})]
+}
+
 export const store = createStore({
     state() {
         return {
-            CurrentScene: new GameScene(),
-            SceneCache: [new GameScene()],
-            PlayerSave: new PlayerSave(),
-            CurrentSceneId: 0,
-            CurrentFrameId: 0,
-            FakeCounter1: 0,
-            FakeCounter2: 0
+
+
+            PlayerSave: new PlayerGameSave(),
+
+
         }
     },
     mutations: {
-        async incrementInventory(state, itemId) {
+        incrementInventory(state, options = {itemId: -1, amount: 0}) {
 
-            let Item = state.PlayerSave.items.find(a => a.itemId === itemId);
+            let Item = state.PlayerSave.items.find(a => a.itemId === options.itemId);
             if (!Item) {
-                Item = await this.AddNewItem(); //automatically saves
-                state.PlayerSave.items.push(Item);
+                state.PlayerSave.items.push(new Inventory({
+                    itemCount: options.amount,
+                    itemId: options.itemId,
+                }));
             } else {
-                Item.itemCount++;
-                await this.Save();
+                Item.itemCount += options.amount;
             }
 
         },
-        async Save() {
+        /// for unique items
+        incrementInventoryUnique(state, options = {itemId: -1}) {
+
+            let Item = state.PlayerSave.items.find(a => a.itemId === options.itemId);
+            if (Item)
+                return;
+
+            state.PlayerSave.items.push(new Inventory({
+                itemCount: 1,
+                itemId: options.itemId,
+            }));
+
         },
-        IncreaseInventory(state, payload) {
-            // const item = state.CurrentScene.gameItems.find(b => b.id === itemID)
-            // const item_stats = state.PlayerSave.items.find(a => a.itemId === itemID);
-            debugger;
-            if (payload.itemId === 0) {
-                state.FakeCounter1 += payload.amount;
-            } else {
-                state.FakeCounter2 += payload.amount;
+        SetQuestState(state, options = {QuestId: -1, QuestState: EQuestState.Failed}) {
+            let qstate = state.PlayerSave.QuestStates.find(a => a.QuestId === options.QuestId);
+            if (!qstate) {
+                qstate = new QuestState(options);
+                state.PlayerSave.QuestStates.push(qstate);
             }
+            qstate.QuestState = options.QuestState;
 
         },
-        async AddNewItem() {
-            //
-            return new Inventory({
-                itemId: 1, id: 1, itemCount: 1, gameId: 0, userId: 1
-            })
+        SetDefaultQuestValue(state, options = {QuestValue: {}, Name: ''}) {
+            let qstate = state.PlayerSave.QuestStates.find(a => a.QuestId === "Default");
+
+            if (!qstate) {
+                throw new Error("No Such Quest")
+            }
+            qstate.QuestParameters[options.Name] = options.QuestValue;
+
         },
-        async DownloadScene(state, sceneId, projectId) {
-            state.SceneCache.push(new GameScene({
+        SetQuestValue(state, options = {QuestId: -1, QuestValue: {}, Name: ''}) {
+            let qstate = state.PlayerSave.QuestStates.find(a => a.QuestId === options.QuestId);
 
-                inventoryClickCondition: [],
-                frames: [new Frame({
-                    sceneId: sceneId,
-                    id: 1,
-                    name: "BgTest",
+            if (!qstate) {
+                throw new Error("No Such Quest")
+            }
+            qstate.QuestParameters[options.Name] = options.QuestValue;
 
-                })],
-                scene: new Scene({
-                    id: sceneId,
-                    frames: [1],
-                    name: "TestFrame",
-                    spriteSheetRefId: 0,
-                    textBlock: 3
-                }),
-                masksImageResult: [],
-                mouseHoverCondition: [],
-                mouseSwipeCondition: [],
-                movesToFrameResult: [],
-                spot: [new Spot({
-                    sceneId: sceneId,
-                    x: 0,
-                    y: 100,
-                    height: 100,
-                    width: 100,
-                    projectId: projectId
-
-                })],
-                project: projectId,
-                clickConditions: [],
-                frameStartConditions: [],
-                gameItems: [],
-                sceneStartCondition: [
-                    new SceneStartCondition({
-                        id: 1,
-                        sceneId: sceneId,
-                        frameId: state.CurrentFrameId,
-                        projectId: projectId,
-                        order: 0,
-                        resultId: 5
-                    })
-
-                ],
-                spriteSheetRefResults: [new SpriteSheetRefResult({
-                    sceneId: sceneId,
-                    frameId: state.CurrentFrameId,
-                    projectId: projectId,
-                    resultId: 5,
-                    spriteSheetRefId: 9
-                })],
-                spriteSheetRefs: [new SpriteSheetRef({
-                    id: 9,
-                    endFrame: 1,
-                    startFrame: 1,
-                    spriteSheetId: 10
-
-                })],
-                spriteSheets: [],
-
-
-            }))
         },
-        UpdateToNewScene(state, sceneId) {
-            state.CurrentSceneId = sceneId;
-        },
-        UpdateToNewFrame(state, frameId) {
-            state.CurrentFrameId = frameId
-        }
+
+
     },
     getters: {
-        GetCurrentScene: state=>  (getters, rootState, rootGetters) => {
+        GetCurrentScene: state => (getters, rootState, rootGetters) => {
             return state.CurrentScene;
         },
-        GetInventory :state=> ( itemID) =>{
-            // const item = state.CurrentScene.gameItems.find(b => b.id === itemID)
-            // const item_stats = state.PlayerSave.items.find(a => a.itemId === itemID);
-            // return {item,item_stats}
-            debugger;
-            if (itemID === 0)
-                return {
-                    item: new Item({}), item_stats: new Inventory({itemCount: state.FakeCounter1})
-                }
-            return {
-                item: new Item({}), item_stats: new Inventory({itemCount: state.FakeCounter2})
+        GetInventory: state => (itemId) => {
+            let Item = state.PlayerSave.items.find(a => a.itemId === itemId);
+            if (!Item) {
+                Item = new Inventory({
+                    itemCount: 0,
+                    itemId: itemId,
+                });
+                state.PlayerSave.items.push(Item);
             }
+            return Item;
 
         },
+        CurrentQuests: state => () => {
+           return state.PlayerSave.QuestStates.map(a => a.QuestId);
+        },
+        GetQuestStates: state => () => {
+            return state.PlayerSave.QuestStates;
+        },
+        HasQuestState: state => (QuestId) => {
+            return state.PlayerSave.QuestStates.find(a => a.QuestId === QuestId);
+        },
+        GetQuestValue: state => (QuestId, ParameterName) => {
+            let qstate = state.PlayerSave.QuestStates.find(a => a.QuestId === options.QuestId);
 
-        GetInventoryConditions: (state) => {
-            const currentFrame = state.CurrentScene.frames.find(a => a.id === state.CurrentFrameId);
-            if (!currentFrame) {
-                //Not loaded??
-                alert("Frame is missing!");
-                return;
+            if (!qstate) {
+                throw new Error("No Such Quest")
             }
-            return state.CurrentScene.inventoryClickCondition.filter(a => a.frameId === currentFrame.id && a.sceneId === state.CurrentSceneId);
-            // for (const condition of inventoryConditions) {
-            //
-            // }
-        }
+            return qstate.QuestParameters[ParameterName];
+        },
+        GetDefaultQuestValue: state => (ParameterName) => {
+            let qstate = state.PlayerSave.QuestStates.find(a => a.QuestId === "Default");
+
+            if (!qstate) {
+                throw new Error("No Such Quest")
+            }
+            return qstate.QuestParameters[ParameterName];
+        },
     }
 
 })

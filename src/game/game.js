@@ -2,6 +2,8 @@ import Phaser from 'phaser'
 import BootScene from "@/game/scenes/BootScene";
 import PlayScene from "@/game/scenes/PlayScene";
 import PlayScene2 from "@/game/scenes/PlayScene2";
+import PreloadSchoolBathroom from "@/game/scenes/SchoolBathroom/PreloadSchoolBathroom";
+import SchoolBathroom from "@/game/scenes/SchoolBathroom/SchoolBathroom";
 
 
 const sceneConfig = '@/game/scenes/index';
@@ -20,7 +22,7 @@ function launch(containerId) {
                 debug: false
             }
         },
-        scene:  [BootScene, PlayScene,PlayScene2]
+        scene:  [PreloadSchoolBathroom, SchoolBathroom]
     })
 }
 

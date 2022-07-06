@@ -1,152 +1,19 @@
 import {Scene} from 'phaser'
 
-import {store} from "@/store";
 
 
 export default class PlayScene extends Scene {
 
     SceneName = '';
-    SceneId = 2;
-    SceneLogic;
 
-    constructor(sceneName = 'PlayScene', SceneId = 2) {
+
+    constructor(sceneName = 'PlayScene' ) {
         super({key: sceneName})
         this.SceneName = sceneName;
-        this.SceneLogic = store.getters.GetCurrentScene()
-
-    }
-
-    Rules = {
-        SpriteMouseOutRules: {},
-        SpriteMouseOverRules: {},
-        SpriteMouseClickRules: {},
-        RectangleMouseClickRules: {},
-        RectangleMouseOutRules: {},
-        RectangleMouseOverRules: {},
-        SceneRules: []
-    }
-
-    characters = {};
-
-    onSceneCreate() {
-        for (let rule of this.SceneRules) {
-            if (this.applySceneRule(rule, this.SceneName, this.SceneId)) return;
-        }
-    }
-
-    onRectangleClick(rect, pointer, name, rectangleId) {
-        const rules = this.Rules.RectangleMouseClickRules[rectangleId];
-        if (!rules) return;
-        for (let rule of rules) {
-            if (this.applyRectangleRule(rule, rect, pointer, name, rectangleId)) break;
-        }
-    }
-
-    OnRectangleOut(rect, pointer, name, rectangleId) {
-        const rules = this.Rules.RectangleMouseOutRules[rectangleId];
-        if (!rules) return;
-        for (let rule of rules) {
-            if (this.applyRectangleRule(rule, rect, pointer, name, rectangleId)) break;
-        }
-    }
-
-    OnRectangleOver(rect, pointer, name, rectangleId) {
-        const rules = this.Rules.RectangleMouseOverRules[rectangleId];
-        if (!rules) return;
-        for (let rule of rules) {
-            if (this.applyRectangleRule(rule, rect, pointer, name, rectangleId)) break;
-        }
-    }
-
-    OnSpriteClick(sprite, pointer, name, spriteId, groupName) {
-
-        const rules = this.Rules.SpriteMouseClickRules[spriteId];
-        if (!rules) return;
-        for (let rule of rules) {
-            if (this.applySpriteRule(rule, sprite, pointer, name, spriteId, groupName)) break;
-        }
-    }
-
-    applySceneRule(rule, scene, name, sceneId) {
-        try {
-            const Result = rule.applyRule(scene, name, sceneId);
-            if (Result) {
-                rule.applyResults(scene, name, sceneId);
-                if (rule.EndEvaluationOnTrue) {
-                    return true;
-                }
-            } else {
-                if (rule.EndEvaluationOnFalse) {
-                    return true;
-                }
-            }
-        } catch (e) {
-            console.log(e);
-            return true;
-        }
-        return false;
-    }
-
-    applyRectangleRule(rule, rectangle, pointer, name, rectangleId) {
-        try {
-            const Result = rule.applyRule(rectangle, pointer, name, rectangleId);
-            if (Result) {
-                rule.applyResults(rectangle, pointer, name, rectangleId);
-                if (rule.EndEvaluationOnTrue) {
-                    return true;
-                }
-            } else {
-                if (rule.EndEvaluationOnFalse) {
-                    return true;
-                }
-            }
-        } catch (e) {
-            console.log(e);
-            return true;
-        }
-        return false;
-    }
-
-    applySpriteRule(rule, sprite, pointer, name, spriteId, groupId) {
-        try {
-            const Result = rule.applyRule(sprite, pointer, name, spriteId, groupId);
-            if (Result) {
-                rule.applyResults(sprite, pointer, name, spriteId, groupId);
-                if (rule.EndEvaluationOnTrue) {
-                    return true;
-                }
-            } else {
-                if (rule.EndEvaluationOnFalse) {
-                    return true;
-                }
-            }
-        } catch (e) {
-            console.log(e);
-            return true;
-        }
-        return false;
-    }
-
-    OnSpriteOut(sprite, pointer, name, spriteId, groupId) {
-        const rules = this.Rules.SpriteMouseOutRules[spriteId];
-        if (!rules) return;
-
-        for (let rule of rules) {
-            if (this.applySpriteRule(rule, sprite, pointer, name, spriteId, groupId)) break;
-        }
 
 
     }
 
-    OnSpriteOver(sprite, pointer, name, spriteId, groupId) {
-
-        const rules = this.Rules.SpriteMouseOverRules[spriteId];
-        if (!rules) return;
-
-        for (let rule of rules) {
-            if (this.applySpriteRule(rule, sprite, pointer, name, spriteId, groupId)) break;
-        }
-    }
 
     createSpriteGroup(Items, GroupName, Scale, Alpha, X, Y, GroupId) {
         this.characters[GroupId] = {};
@@ -155,25 +22,24 @@ export default class PlayScene extends Scene {
         }
     }
 
-    createSprite(item, X, Y, Scale, Alpha, GroupId) {
-        let {Name, Id} = item;
+    createSprite(item) {
+        let {Name, Id, X, Y, Scale, Alpha, Visible,Interactive,MouseEvents} = item;
         let sprite = this.add.sprite(X, Y, Name);
-
-        sprite.setInteractive();
+        sprite.visible =Visible
+        if(Interactive)
+            sprite.setInteractive();
         sprite.scale = Scale;
         sprite.alpha = Alpha
         sprite.on('pointerout', (pointer) => {
-            this.OnSpriteOut(sprite, pointer, Name, Id, GroupId)
+            MouseEvents('MouseOut',item,sprite,pointer,this)
         })
         sprite.on('pointerover', (pointer) => {
-
-            this.OnSpriteOver(sprite, pointer, Name, Id, GroupId)
+            MouseEvents('MouseOver',item,sprite,pointer,this)
         });
         sprite.on('pointerup', (pointer) => {
-
-            this.OnSpriteClick(sprite, pointer, Name, Id, GroupId)
+            MouseEvents('MouseUp',item,sprite,pointer,this)
         });
-        this.characters[GroupId][Id] = sprite;
+
     }
 
     createSpriteSheet(item, X, Y, Scale, Alpha, frameStart, frameEnd, fps, repeat) {
@@ -229,6 +95,10 @@ export default class PlayScene extends Scene {
     }
 
 
+    // triggers an event on a quest (default being the "world" quest the ends when you win.
+    triggerCustomEvent(EventName,QuestName = "Default"){
+
+    }
     createRectangle(RectangleId, Name, X, Y, Width, Height, FillColor, Alpha, TweenEffect) {
         const rectangle = this.add.rectangle(X, Y, Width, Height, FillColor, Alpha);
         rectangle.setInteractive()
@@ -263,7 +133,7 @@ export default class PlayScene extends Scene {
 
     create() {
 
-        this.onSceneCreate();
+
 
 
 

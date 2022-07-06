@@ -24,7 +24,7 @@ function launch(containerId) {
                 debug: false
             }
         },
-        scene:  [PreloadForestGlade,ForestGlade, PreloadKitchen,Kitchen, PreloadSchoolBathroom, SchoolBathroom]
+        scene:  [PreloadKitchen,Kitchen, PreloadForestGlade,ForestGlade, PreloadSchoolBathroom, SchoolBathroom]
     })
 }
 

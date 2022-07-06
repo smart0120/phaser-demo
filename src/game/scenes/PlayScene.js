@@ -1,4 +1,5 @@
 import {Scene} from 'phaser'
+import {GetQuestSection, GetSetting, SetSetting} from "@/store";
 
 
 export default class PlayScene extends Scene {
@@ -17,6 +18,16 @@ export default class PlayScene extends Scene {
 
 
     SpriteList = []
+
+    cloneSprite(item) {
+        let clone_count = 0;
+        const clone = Object.assign({}, item);
+        clone.name = clone.name + "_Clone_" + clone_count;
+        while (this.getSpriteByName(clone.name)) {
+            clone.name = item.name + "_Clone_" + ++clone_count;
+        }
+        return this.createSprite(clone);
+    }
 
     createSprite(item) {
         let {Name, Id, X, Y, Scale, Alpha, Visible, Interactive, MouseEvents, EventsData} = item;
@@ -92,6 +103,7 @@ export default class PlayScene extends Scene {
     }
 
     TextBoxes = []
+    Tweens = []
 
     createTextBox(item) {
 
@@ -103,12 +115,105 @@ export default class PlayScene extends Scene {
         this.TextBoxes.push({text_box: text_box, Name: Name, Item: item})
     }
 
+    async triggerAnimation(sprite_name, animation_name, animation_options) {
+
+    }
+
+    resetSpriteXY_Walk(sprite_name) {
+
+        let found = this.SpriteList.find(a => a.Name === sprite_name);
+        if (!found) {
+            throw new Error("No Such Sprite")
+        }
+        return this.walkSprite(found.sprite, found.item.X, found.item.Y)
+
+
+    }
+
+    resetSpriteXY(sprite_name) {
+
+        let found = this.SpriteList.find(a => a.Name === sprite_name);
+        if (!found) {
+            throw new Error("No Such Sprite")
+        }
+        found.sprite.x = found.item.X;
+        found.sprite.y = found.item.Y;
+
+
+    }
+
+    triggerYoYo(sprite) {
+
+        let tween = {
+            targets: sprite,
+            duration:1500,
+            tweens: [{x: 600,y:400 }],
+            yoyo: true,
+            loop: -1,
+
+        };
+        const TimeLine = this.tweens.timeline(tween);
+        return new Promise((resolve, reject) => {
+            TimeLine.on('stop', () => {
+                alert("done")
+                resolve(...arguments);
+            })
+        })
+
+    }
+
+    clearAnimations(sprite) {
+
+        this.tweens.killTweensOf(sprite)
+    }
+
     async triggerTextBox(TextBoxName, Quest = "Default") {
 
         const box = this.TextBoxes.find(a => a.Name === TextBoxName);
         if (!box) return;
-        if (box.text_box[Quest])
-            await box.text_box[Quest]();
+        const Section = GetQuestSection(Quest);
+
+        const UniqueQuestSectionTextSetting = `${Quest}_${TextBoxName}_${Section}_Unique`;
+        const UniqueQuestTextSetting = `${Quest}_${TextBoxName}_Unique`;
+        const QuestSectionCountSetting = `${Quest}_${TextBoxName}_${Section}_Count`;
+        const QuestCountSetting = `${Quest}_${TextBoxName}_Count`;
+
+        const UniqueQuestSectionEvent = `${Quest}_${Section}_Unique`;
+        const UniqueQuestEvent = `${Quest}_Unique`;
+        const QuestSectionEvent = `${Quest}_${Section}`;
+        const QuestEvent = `${Quest}`;
+
+
+        const UniqueQuestSectionTextTest = () => box.text_box[UniqueQuestSectionEvent] && !GetSetting(UniqueQuestSectionTextSetting, Quest);
+        const UniqueQuestTextTest = () => box.text_box[UniqueQuestEvent] && !GetSetting(UniqueQuestTextSetting, Quest);
+        const QuestSectionText = () => box.text_box[QuestSectionEvent];
+
+        const QuestSectionCount = GetSetting(QuestCountSetting, Quest, 0);
+        const QuestCount = GetSetting(`${Quest}_${TextBoxName}_Count`, Quest, 0);
+        const QuestText = () => box.text_box[QuestEvent];
+
+        if (UniqueQuestSectionTextTest()) {
+            await box.text_box[UniqueQuestSectionEvent].bind(box.text_box)(this);
+            SetSetting(UniqueQuestSectionTextSetting, true, this, Quest);
+
+        } else if (UniqueQuestTextTest()) {
+            await box.text_box[UniqueQuestEvent].bind(box.text_box)(this);
+            SetSetting(UniqueQuestTextSetting, true, this, Quest);
+
+        } else {
+            const questSectionText = QuestSectionText();
+            if (questSectionText) {
+                await questSectionText.bind(box.text_box)(this, QuestSectionCount);
+                SetSetting(QuestSectionCountSetting, QuestSectionCount + 1, this, Quest);
+            } else {
+                const questText = QuestText();
+
+                if (questText) {
+                    await questText.bind(box.text_box)(this, QuestCount);
+                    SetSetting(QuestCountSetting, QuestCount + 1, this, Quest)
+                }
+            }
+        }
 
 
     }
@@ -124,27 +229,66 @@ export default class PlayScene extends Scene {
     triggerQuestStart(QuestName) {
         this.triggerCustomEvent("Started", QuestName)
     }
-    getSpriteByName(name){
-       return this.SpriteList.find(a=>a.Name === name).sprite;
+
+    getSpriteByName(name) {
+        let found = this.SpriteList.find(a => a.Name === name);
+        if (!found) return undefined;
+        return found.sprite;
     }
+
+    walkSprite(sprite, x, y) {
+
+        let tween = {
+            targets: sprite,
+            duration:500,
+            tweens: [{x: x}, {y: y}],
+            yoyo: false,
+            loop: 0,
+
+        };
+        const TimeLine = this.tweens.timeline(tween);
+        return new Promise((resolve, reject) => {
+            TimeLine.on('complete', () => {
+                resolve(...arguments);
+            })
+        })
+    }
+
+    walkOutSprite(sprite) {
+        sprite.removeInteractive()
+        let tween = {
+            targets: sprite,
+            tweens: [{x: 600}, {y: 500}, {x: 100}, {y: 100}],
+            yoyo: false,
+            loop: 0,
+
+        };
+        const TimeLine = this.tweens.timeline(tween);
+        TimeLine.on('complete', () => {
+            sprite.visible = false;
+        })
+    }
+
     // triggers an event on a quest (default being the "world" quest the ends when you win.
     triggerCustomEvent(EventName, QuestName = "Default", payload) {
-            if(QuestName === "Default")
-                QuestName = "default";
-        if (this.SceneEvents[QuestName] && this.SceneEvents[QuestName][EventName]) {
-            this.SceneEvents[QuestName][EventName](null,null,this)
+        if (QuestName === "Default")
+            QuestName = "default";
+        if (EventName === "Finished") {
+            debugger;
         }
-        debugger;
+        if (this.SceneEvents[QuestName] && this.SceneEvents[QuestName][EventName]) {
+            this.SceneEvents[QuestName][EventName](null, null, this, payload)
+        }
+
         for (let i = this.SpriteList.length - 1; i >= 0; i--) {
             const sprite = this.SpriteList[i];
             const events = sprite.item.EventsData;
-            if (events)
-                if (events[QuestName]) {
-                    if (events[QuestName][EventName]) {
+            if (events && events[QuestName]) {
+                if (events[QuestName][EventName]) {
 
-                        events[QuestName][EventName](sprite.item,sprite.sprite,this)
-                    }
+                    events[QuestName][EventName].bind(events[QuestName])(sprite.item, sprite.sprite, this, payload)
                 }
+            }
         }
 
     }
@@ -182,7 +326,6 @@ export default class PlayScene extends Scene {
     }
 
     create() {
-
 
 
     }

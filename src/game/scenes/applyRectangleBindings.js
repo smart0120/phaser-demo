@@ -3,7 +3,7 @@ import {store} from "@/store";
 
 export default function ApplyRectangleBindings(SpotConditions) {
     ClickCondition.prototype.applyRectangleRule = function (rectangle, pointer, name, rectangleId) {
-        debugger
+
         return true; // click always passes because hitbox is managed by phaser
     }
     ClickCondition.prototype.applyRectangleInventoryRule = function (rectangle, pointer, name, rectangleId) {

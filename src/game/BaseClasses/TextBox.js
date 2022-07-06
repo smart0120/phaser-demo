@@ -1,14 +1,18 @@
 export default class TextBox {
     constructor(text_obj, scene) {
+
         this.text = '';
         this.text_obj = text_obj;
         this.scene = scene;
+
+
 
 
     }
 
 
     SetText(text) {
+        this.Resolve();
         this.text = text;
 
         this.text_obj.text = text;

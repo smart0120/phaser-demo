@@ -14,15 +14,16 @@ import {
 
 export const EQuestState = {
     'Started': 0,
-    'Finished': 0,
-    'Failed': 0,
+    'Finished': 1,
+    'Failed': 2,
 
 }
 
 export class QuestState {
     QuestId = ''
     QuestParameters = {}
-    QuestSection='Started'
+    QuestSection = 'Started'
+
     constructor(options = {QuestId: '', QuestState: EQuestState.Failed}) {
         Object.assign(this, options);
     }
@@ -33,7 +34,13 @@ export class QuestState {
 }
 
 export class PlayerGameSave extends PlayerSave {
-    QuestStates = [new QuestState({QuestId: "Default", QuestState: EQuestState.Started})]
+    QuestStates = [new QuestState({QuestId: "Default", QuestState: EQuestState.Started, QuestSection: "Started"})]
+    FinishedQuestStates = []
+    PausedQuestStates = []
+    FailedQuestStates = []
+    All(){
+        return [this.FinishedQuestStates,this.PausedQuestStates,this.FailedQuestStates,this.QuestStates].flat();
+    }
 }
 
 export const store = createStore({
@@ -73,14 +80,24 @@ export const store = createStore({
             }));
 
         },
-        SetQuestState(state, options = {QuestId: -1, QuestState: EQuestState.Failed}) {
-           debugger;
-            let qstate = state.PlayerSave.QuestStates.find(a => a.QuestId === options.QuestId);
-            if (!qstate) {
+        SetQuestState(state, options = {QuestId: -1, QuestSection: 'Start', QuestState: EQuestState.Failed}) {
+
+            let qstate;
+            let index = state.PlayerSave.QuestStates.findIndex(a => a.QuestId === options.QuestId);
+            if (index < 0) {
                 qstate = new QuestState(options);
                 state.PlayerSave.QuestStates.push(qstate);
+            } else {
+                qstate = state.PlayerSave.QuestStates[index]
             }
             qstate.QuestState = options.QuestState;
+            switch (qstate.QuestState) {
+                case EQuestState.Finished:
+                    state.PlayerSave.QuestStates.splice(index, 1);
+                    state.PlayerSave.FinishedQuestStates.push(qstate)
+                    break
+            }
+
 
         },
         SetDefaultQuestValue(state, options = {QuestValue: {}, Name: ''}) {
@@ -93,7 +110,7 @@ export const store = createStore({
 
         },
         SetQuestValue(state, options = {QuestId: -1, Value: {}, Name: ''}) {
-            let qstate = state.PlayerSave.QuestStates.find(a => a.QuestId === options.QuestId);
+            let qstate = state.PlayerSave.All().find(a => a.QuestId === options.QuestId);
 
             if (!qstate) {
                 throw new Error("No Such Quest")
@@ -101,7 +118,8 @@ export const store = createStore({
             qstate.QuestParameters[options.Name] = options.Value;
 
         },
-        SetQuestSection(state, options = {QuestId: -1,   Section: ''}) {
+        SetQuestSection(state, options = {QuestId: -1, Section: ''}) {
+
             let qstate = state.PlayerSave.QuestStates.find(a => a.QuestId === options.QuestId);
 
             if (!qstate) {
@@ -147,12 +165,23 @@ export const store = createStore({
             return qstate.QuestParameters[ParameterName];
         },
         GetQuestSection: state => (QuestId) => {
-            let qstate = state.PlayerSave.QuestStates.find(a => a.QuestId === options.QuestId);
+            let qstate = state.PlayerSave.QuestStates.find(a => a.QuestId === QuestId);
 
             if (!qstate) {
                 throw new Error("No Such Quest")
             }
             return qstate.QuestSection;
+        }, GetQuestCompleted: state => (QuestId) => {
+            return state.PlayerSave.FinishedQuestStates.find(a => a.QuestId === QuestId);
+
+
+        },
+        GetQuestCreated: state => (QuestId) => {
+            let qstate = state.PlayerSave.QuestStates.find(a => a.QuestId === QuestId) ||
+                state.PlayerSave.FinishedQuestStates.find(a => a.QuestId === QuestId) ||
+                state.PlayerSave.FailedQuestStates.find(a => a.QuestId === QuestId);
+
+            return qstate;
         },
         GetDefaultQuestValue: state => (ParameterName) => {
             let qstate = state.PlayerSave.QuestStates.find(a => a.QuestId === "Default");
@@ -165,19 +194,37 @@ export const store = createStore({
     }
 
 })
-export function SetQuestSection(QuestName,QuestSection){
-    store.commit('SetQuestState', {QuestId: QuestName, QuestSection: QuestSection})
+
+export function SetQuestSection(QuestName, QuestSection, Scene) {
+
+    store.commit('SetQuestSection', {QuestId: QuestName, Section: QuestSection})
+    Scene.triggerCustomEvent(`QuestSectionUpdate_${QuestSection}`, QuestName)
 }
-export function GetQuestSection(QuestName){
+
+export function GetQuestSection(QuestName) {
+
     return store.getters.GetQuestSection(QuestName)
 }
-export function GetSetting(SettingName,QuestId = "Default"){
-    return store.getters.GetQuestValue(QuestId,SettingName)
-}
-export async function SetSetting(SettingName,SettingValue,Scene,QuestId = "Default"){
-    await store.commit('SetQuestValue',{QuestId: QuestId, Value: SettingValue, Name: SettingName})
 
-    Scene.triggerCustomEvent("QuestSettingsUpdate_" + SettingName,QuestId)
+export function GetQuestCreated(QuestName) {
+
+    return store.getters.GetQuestCreated(QuestName)
+}
+
+export function GetQuestCompleted(QuestName) {
+
+    return store.getters.GetQuestCompleted(QuestName)
+}
+
+export function GetSetting(SettingName, QuestId = "Default", defaultValue) {
+    const val = store.getters.GetQuestValue(QuestId, SettingName)
+    return val === undefined ? defaultValue : val;
+}
+
+export async function SetSetting(SettingName, SettingValue, Scene, QuestId = "Default") {
+    await store.commit('SetQuestValue', {QuestId: QuestId, Value: SettingValue, Name: SettingName})
+
+    Scene.triggerCustomEvent("QuestSettingsUpdate_" + SettingName, QuestId,SettingValue)
 }
 
 export function FailQuest(QuestName, scene) {
@@ -186,13 +233,15 @@ export function FailQuest(QuestName, scene) {
 }
 
 export function EndQuest(QuestName, scene) {
-    store.commit('SetQuestState', {QuestId: QuestName, QuestState: EQuestState.Finished})
+    debugger;
     scene.triggerQuestFinished(QuestName)
+    store.commit('SetQuestState', {QuestId: QuestName, QuestState: EQuestState.Finished})
+
 }
 
-export function StartQuest(QuestName, scene) {
-    store.commit('SetQuestState', {QuestId: QuestName, QuestState: EQuestState.Started})
-    scene.triggerQuestStart(QuestName)
+export async function StartQuest(QuestName, scene, Section) {
+    await store.commit('SetQuestState', {QuestId: QuestName, QuestSection: Section, QuestState: EQuestState.Started})
+    await scene.triggerQuestStart(QuestName)
 
 }
 

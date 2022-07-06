@@ -17,8 +17,9 @@ export default class SceneSpriteEvents {
 
     MouseUp(sprite_lib,sprite,pointer,Scene) {
     }
+    Scene;
     SceneCreated(sprite_lib,sprite,Scene){
-
+        this.Scene = Scene;
     }
     SceneEnding(sprite_lib,sprite,Scene){
 

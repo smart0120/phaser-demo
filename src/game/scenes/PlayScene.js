@@ -132,9 +132,9 @@ export default class PlayScene extends Scene {
             if(QuestName === "Default")
                 QuestName = "default";
         if (this.SceneEvents[QuestName] && this.SceneEvents[QuestName][EventName]) {
-            this.SceneEvents[QuestName][EventName](this, payload)
+            this.SceneEvents[QuestName][EventName](null,null,this)
         }
-
+        debugger;
         for (let i = this.SpriteList.length - 1; i >= 0; i--) {
             const sprite = this.SpriteList[i];
             const events = sprite.item.EventsData;

@@ -1,18 +1,26 @@
 export default class TextBox {
-    constructor(text_obj, scene) {
+    constructor(scene  ,item) {
 
         this.text = '';
-        this.text_obj = text_obj;
+
         this.scene = scene;
+      //  this.createSpeechBubble(item.X,item.Y,  500, 200, this.text);
+     //   this.group = this.scene.add.group([this.bubble, this.text_obj])
+     //   this.bubble.visible = false;
 
-
-
-
+        this.text_obj = this.scene.add.text(item.X, item.Y,   this.text, {
+            fontFamily: 'Arial',
+            fontSize: 20,
+            color: '#FFFFFF',
+            align: 'center',
+            wordWrap: {width: 800 }
+        });  this.text_obj.visible = false;
     }
-
 
     SetText(text) {
         this.Resolve();
+      //  this.bubble.visible = true;
+       this.text_obj.visible = true;
         this.text = text;
 
         this.text_obj.text = text;
@@ -35,7 +43,7 @@ export default class TextBox {
     }
 
     Show() {
-        this.text_obj.visible = true;
+
 
 
         return new Promise((resolve, reject) => {
@@ -60,7 +68,7 @@ export default class TextBox {
 
             this.HideEffect();
         }
-        this.text_obj.visible = false;
+        this.group.visible = false;
     }
 
     HideEffect() {

@@ -108,10 +108,8 @@ export default class PlayScene extends Scene {
     createTextBox(item) {
 
         let {Name, Id, X, Y, FontFamily, TextClass, Interactive, EventsData} = item;
-        const text_obj = this.add.text(X, Y, '', {fontFamily: FontFamily})
-        if (Interactive)
-            text_obj.setInteractive()
-        const text_box = new TextClass(text_obj, this)
+
+        const text_box = new TextClass(this,item );
         this.TextBoxes.push({text_box: text_box, Name: Name, Item: item})
     }
 

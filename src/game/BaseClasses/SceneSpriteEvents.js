@@ -4,7 +4,9 @@ export default class SceneSpriteEvents {
 
     Finished(sprite_lib, sprite, Scene) {
     }
+    PointerMove(pointer,Scene){
 
+    }
     Failed(sprite_lib, sprite, Scene) {
     }
     MouseOver(sprite_lib,sprite,pointer,Scene) {
@@ -24,3 +26,4 @@ export default class SceneSpriteEvents {
     //SomeCustomEvent
 
 }
+

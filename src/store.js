@@ -12,9 +12,9 @@ import {
     SpriteSheetRefResult
 } from "@/dtos.js";
 
-const EQuestState = {
+export const EQuestState = {
     'Started': 0,
-    'Completed': 0,
+    'Finished': 0,
     'Failed': 0,
 
 }
@@ -74,6 +74,7 @@ export const store = createStore({
 
         },
         SetQuestState(state, options = {QuestId: -1, QuestState: EQuestState.Failed}) {
+           debugger;
             let qstate = state.PlayerSave.QuestStates.find(a => a.QuestId === options.QuestId);
             if (!qstate) {
                 qstate = new QuestState(options);
@@ -120,7 +121,7 @@ export const store = createStore({
 
         },
         CurrentQuests: state => () => {
-           return state.PlayerSave.QuestStates.map(a => a.QuestId);
+            return state.PlayerSave.QuestStates.map(a => a.QuestId);
         },
         GetQuestStates: state => () => {
             return state.PlayerSave.QuestStates;
@@ -147,4 +148,20 @@ export const store = createStore({
     }
 
 })
+
+export function FailQuest(QuestName, scene) {
+    store.commit('SetQuestState', {QuestId: QuestName, QuestState: EQuestState.Failed})
+    scene.triggerQuestFailed(QuestName)
+}
+
+export function EndQuest(QuestName, scene) {
+    store.commit('SetQuestState', {QuestId: QuestName, QuestState: EQuestState.Finished})
+    scene.triggerQuestFinished(QuestName)
+}
+
+export function StartQuest(QuestName, scene) {
+    store.commit('SetQuestState', {QuestId: QuestName, QuestState: EQuestState.Started})
+    scene.triggerQuestStart(QuestName)
+
+}
 

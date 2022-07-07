@@ -9,7 +9,7 @@ export class condomQuestEvent extends exportClass {
         let clones = [];
         for(let i=0;i<8;i++)
         {
-            let clone = Scene.cloneSprite(require('../condom'))
+            let clone = Scene.cloneSprite(require('../condom'),Scene.SceneName)
             clone.visible = true;
             clones.push(clone)
         }

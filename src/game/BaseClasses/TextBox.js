@@ -11,7 +11,7 @@ export default class TextBox {
         this.text_obj = this.scene.add.text(item.X, item.Y,   this.text, {
             fontFamily: 'Arial',
             fontSize: 20,
-            color: '#FFFFFF',
+            color: '#000000',
             align: 'center',
             wordWrap: {width: 800 }
         });  this.text_obj.visible = false;

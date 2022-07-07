@@ -46,10 +46,10 @@ export default class SchoolBathroom extends PlayScene {
     create() {
 
         this.SceneEvents = EventsData;
-        this.createSprite(background.default[0][0]);
+        this.createSprite(background );
 
         for (const sprite_name of SpriteNames) {
-            this.createSprite(sprite_name);
+            this.createSprite(sprite_name,'SchoolBathroom');
         }
         for (const textbox of TextBoxes) {
             this.createTextBox(textbox);

@@ -2,7 +2,7 @@
         import _smoke from './images/smoke.png'
 let paths = [
         ['smoke', _smoke, 32],
-      
+
     ]
 
       import {store} from "@/store";
@@ -17,7 +17,7 @@ export const Visible = true
 export const X = 0;
 export const Y = 0;
 export const Height = 535;
-export const Interactive= true
+export const Interactive= false
 export const Width = 1920;
 export const Alpha = 1;
 export let Scale = 1;
@@ -31,8 +31,8 @@ export let Scale = 1;
                         quest_found = true;
                     }
             }
-            if(!quest_found && EventsData.default && EventsData.default[name]) EventsData.default[name](sprite_definition,sprite,pointer,scene)  
-         
+            if(!quest_found && EventsData.default && EventsData.default[name]) EventsData.default[name](sprite_definition,sprite,pointer,scene)
+
 
         }
 

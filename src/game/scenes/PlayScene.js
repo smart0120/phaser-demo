@@ -19,24 +19,30 @@ export default class PlayScene extends Scene {
 
     SpriteList = []
 
-    cloneSprite(item) {
+    cloneSprite(item,SceneName) {
         let clone_count = 0;
         const clone = Object.assign({}, item);
         clone.name = clone.name + "_Clone_" + clone_count;
         while (this.getSpriteByName(clone.name)) {
             clone.name = item.name + "_Clone_" + ++clone_count;
         }
-        return this.createSprite(clone);
+        return this.createSprite(clone,SceneName);
     }
 
-    createSprite(item) {
+    createSprite(item,SceneName='') {
         let {Name, Id, X, Y, Scale, Alpha, Visible, Interactive, MouseEvents, EventsData} = item;
-        let sprite = this.add.sprite(X, Y, Name);
+
+        let sprite = this.add.sprite(  X,    Y, SceneName + Name);
         sprite.visible = Visible
         if (Interactive)
             sprite.setInteractive();
         sprite.scale = Scale;
         sprite.alpha = Alpha
+        sprite.setOrigin(0,0);
+    //    sprite.setOriginFromFrame()
+
+        sprite.width = item.Width;
+        sprite.height = item.Height;
         sprite.on('pointerout', (pointer) => {
             MouseEvents('MouseOut', item, sprite, pointer, this)
         })
@@ -44,6 +50,7 @@ export default class PlayScene extends Scene {
             MouseEvents('MouseOver', item, sprite, pointer, this)
         });
         sprite.on('pointerup', (pointer) => {
+
             MouseEvents('MouseUp', item, sprite, pointer, this)
         });
         this.SpriteList.push({sprite, item, Name});
@@ -324,7 +331,6 @@ export default class PlayScene extends Scene {
     }
 
     create() {
-
 
     }
 

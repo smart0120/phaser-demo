@@ -1,7 +1,7 @@
 
 const background = require('./sprites/bg/bg') ;
 import {Scene} from "phaser";
-    
+
             const shower_2 = require( './sprites/shower_2/shower_2')
 const shower_1 = require( './sprites/shower_1/shower_1')
 const urinal = require( './sprites/urinal/urinal')
@@ -34,19 +34,19 @@ const flora_xray = require( './sprites/flora_xray/flora_xray')
 const flora = require( './sprites/flora/flora')
             const SpriteNames = [shower_2,shower_1,urinal,sink,selfie_stick,stall_doors,door,cracked_snowglobe,shoes,soap,condom,face_shield,cigarettes,mask,lizard,basket,painting,fork,lockers,locker_3,locker_2,locker_1,hot_air_dryer,sinks_columns,sinks,mirror,water_bottle,flora_xray_full,flora_xray,flora]
             export default class PreloadSchoolBathroom extends Scene{
-        
+
             constructor(){
-                super('preload_SchoolBathroom')  
-               
+                super('preload_SchoolBathroom')
+
             }
             preload() {
-                this.load.image(background.default[0][0],background.default[0][1]);
+                this.load.image('SchoolBathroom' + background.default[0][0],background.default[0][1]);
                 for(const sprite_name of SpriteNames){
-                 this.load.image(sprite_name.default[0][0],  sprite_name.default[0][1]);
+                 this.load.image('SchoolBathroom' + sprite_name.default[0][0],  sprite_name.default[0][1]);
                 }
             }
 
-   
+
                 create() {
             this.scene.start('SchoolBathroom')
         }

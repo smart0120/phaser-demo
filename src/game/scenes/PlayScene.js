@@ -6,7 +6,7 @@ import {StopEventLoop} from "@/game/scenes/StopEventLoop";
 export default class PlayScene extends Scene {
     DebugText(eventname, point, sprite) {
 
-            this.triggerTextBox("DebugTextBox", "Default", {point, sprite})
+        this.triggerTextBox("DebugTextBox", "Default", {point, sprite})
 
     }
 
@@ -94,7 +94,7 @@ export default class PlayScene extends Scene {
         sprite.height = item.Height;
         const EventsData = this.SpriteLogic(item.event_file);
         let sprite_def = {sprite, item, Name, EventsData};
-
+        let lastClick = 0;
         sprite.on('pointerout', (pointer) => {
             this.DebugText('PointerOut', pointer, sprite)
             this.MouseEvents('PointerOut', sprite_def, pointer, EventsData)
@@ -104,8 +104,18 @@ export default class PlayScene extends Scene {
             this.MouseEvents('PointerOver', sprite_def, pointer, EventsData)
         });
         sprite.on('pointerup', (pointer) => {
-            this.DebugText('PointerUp', pointer, sprite)
-            this.MouseEvents('PointerUp', sprite_def, pointer, EventsData)
+            let clickTime = +(new Date());
+            let lastClickTime = lastClick;
+            lastClick = clickTime;
+            let eventName = 'PointerDoubleClick';
+            if (clickTime - lastClickTime > 500) {
+
+                eventName = 'PointerUp'
+            }
+            this.MouseEvents(eventName, sprite_def, pointer, EventsData)
+
+
+            this.DebugText(eventName, pointer, sprite)
         });
 
 

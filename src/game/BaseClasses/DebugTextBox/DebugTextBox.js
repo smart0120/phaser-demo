@@ -1,4 +1,4 @@
-import {DebugTextBoxTextBox} from "@/game/scenes/Kitchen/textboxes/DebugTextBox/DebugTextBoxTextBox";
+import {DebugTextBoxTextBox} from "@/game/BaseClasses/DebugTextBox/DebugTextBoxTextBox";
 
     export const Name = "DebugTextBox"
     export const Id = "1"

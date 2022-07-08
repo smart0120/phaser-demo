@@ -1,30 +1,61 @@
+import Xray from "@/game/BaseClasses/Xray";
+
 export default class SceneSpriteEvents {
-    Started(sprite_lib, sprite, Scene) {
+    Started(Scene, Sprite, Payload) {
     }
 
-    Finished(sprite_lib, sprite, Scene) {
-    }
-    PointerMove(pointer,Scene){
-
-    }
-    Failed(sprite_lib, sprite, Scene) {
-    }
-    MouseOver(sprite_lib,sprite,pointer,Scene) {
+    Finished(Scene, Sprite, Payload) {
     }
 
-    MouseOut(sprite_lib,sprite,pointer,Scene) {
-    }
-
-    MouseUp(sprite_lib,sprite,pointer,Scene) {
-    }
-    Scene;
-    SceneCreated(sprite_lib,sprite,Scene){
-        this.Scene = Scene;
-    }
-    SceneEnding(sprite_lib,sprite,Scene){
+    PointerMove(Scene, Sprite, Payload) {
 
     }
-    //SomeCustomEvent
+
+    Failed(Scene, Sprite, Payload) {
+    }
+
+    PointerUp(Scene, Sprite, Payload) {
+
+    }
+
+    PointerOut(Scene, Sprite, Payload) {
+    }
+
+
+    SceneCreated(Scene, Sprite, Payload) {
+
+
+    }
+
+    SceneFinished(Scene, Sprite, Payload) {
+
+    }
+
 
 }
 
+
+export const SceneEvents = class SceneEvents {
+
+    PointerUp(Scene, payload) {
+    }
+
+    PointerOut(Scene, payload) {
+    }
+
+    PointerOver(Scene, payload) {
+    }
+    PointerMove(Scene, payload) {
+    }
+
+    SceneCreated(Scene, payload) {
+
+    }
+
+    SceneFinished(Scene, payload) {
+
+    }
+
+    //SomeCustomEvent
+
+}

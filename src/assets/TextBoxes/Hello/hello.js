@@ -1,4 +1,4 @@
-import {HelloTextBox} from "@/game/scenes/SchoolBathroom/TextBoxes/Hello/helloTextBox";
+import {HelloTextBox} from "@/game/scenes/old scenes/SchoolBathroom/TextBoxes/Hello/helloTextBox";
 
 export const Name = ""
 export const Id = ""

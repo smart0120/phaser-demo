@@ -1,11 +1,14 @@
 import Phaser from 'phaser'
 
-import PreloadSchoolBathroom from "@/game/scenes/SchoolBathroom/PreloadSchoolBathroom";
+
 import SchoolBathroom from "@/game/scenes/SchoolBathroom/SchoolBathroom";
+import PreloadSchoolBathroom from "@/game/scenes/SchoolBathroom/PreloadSchoolBathroom";
 import PreloadKitchen from "@/game/scenes/Kitchen/PreloadKitchen";
 import Kitchen from "@/game/scenes/Kitchen/Kitchen";
 import PreloadForestGlade from "@/game/scenes/ForestGlade/PreloadForestGlade";
 import ForestGlade from "@/game/scenes/ForestGlade/ForestGlade";
+import MenuExampleScene from "@/game/scenes/MenuExample/MenuExampleScene";
+import PreloadMenuExampleScene from "@/game/scenes/MenuExample/PreloadMenuExampleScene";
 
 
 const sceneConfig = '@/game/scenes/index';
@@ -24,7 +27,7 @@ function launch(containerId) {
                 debug: false
             }
         },
-        scene:  [ PreloadKitchen,Kitchen, PreloadForestGlade,ForestGlade,PreloadSchoolBathroom, SchoolBathroom]
+        scene:  [PreloadSchoolBathroom,SchoolBathroom,PreloadForestGlade,PreloadMenuExampleScene, MenuExampleScene,ForestGlade]
     })
 }
 

@@ -19,11 +19,14 @@ export default class SceneSpriteEvents {
     }
 
     PointerDoubleClick(Scene, Sprite, Payload) {
-     //   if (process.env.NODE_ENV !== "development")
+        if (process.env.NODE_ENV !== "development")
             return;
 
         try {
             let input = "http://localhost:9998/scenes/" + Scene.SceneName + "/sprites/" + Sprite.Name + "/" + Sprite.Name + ".js";
+            if (this.cursorKeys.space.isDown) {
+                input+="?visible";
+            }
             if (this.cursorKeys.shift.isDown) {
                 input = "http://localhost:9998/scenes/" + Scene.SceneName + "/sprites/" + Sprite.Name + "/events/" + Sprite.Name + ".js";
             }

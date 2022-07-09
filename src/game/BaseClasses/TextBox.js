@@ -16,8 +16,13 @@ export default class TextBox {
 
         this.scene = scene;
 
-        this.createTextBox().start(  this.text ,50)
-      this.page=  this.text_obj.page
+        this.createTextBox( {
+            wrapWidth: 500,
+            fixedWidth: 500,
+            fixedHeight: 65,
+          x:  item.X,y:item.Y,
+        }).start(this.text, 50)
+        this.page = this.text_obj.page
     }
 
     createBackground() {
@@ -34,11 +39,7 @@ export default class TextBox {
         return rectangle;
     }
 
-    createTextBox(config = {
-        wrapWidth: 500,
-        fixedWidth: 500,
-        fixedHeight: 65, x: 100, y: 100
-    }) {
+    createTextBox(config ) {
 
         const {
             wrapWidth,
@@ -49,7 +50,7 @@ export default class TextBox {
 
         } = config;
 
-        this.text_obj = this.scene.rexUI.add.textBox( {
+        this.text_obj = this.scene.rexUI.add.textBox({
             x: x,
             y: y,
 
@@ -57,8 +58,8 @@ export default class TextBox {
 
             icon: this.createIcon(),
 
-           // text: this.getBuiltInText(wrapWidth, fixedWidth, fixedHeight),
-            text: this.getBBcodeText( wrapWidth, fixedWidth, fixedHeight),
+            // text: this.getBuiltInText(wrapWidth, fixedWidth, fixedHeight),
+            text: this.getBBcodeText(wrapWidth, fixedWidth, fixedHeight),
 
             action: this.scene.add.image(0, 0, 'Vines_Book').setTint(COLOR_LIGHT).setVisible(false),
 
@@ -76,7 +77,7 @@ export default class TextBox {
 
         this.text_obj
             .setInteractive()
-        const textBox =   this.text_obj
+        const textBox = this.text_obj
         textBox
             .setInteractive()
 
@@ -90,9 +91,11 @@ export default class TextBox {
     OnTextBoxClick(pointer) {
 
     }
-    TypeNextPage(){
+
+    TypeNextPage() {
         this.text_obj.typeNextPage();
     }
+
     TextBoxClick(pointer) {
 
         const icon = this.text_obj.getElement('action').setVisible(false);
@@ -107,7 +110,7 @@ export default class TextBox {
     }
 
     OnPageEnd(IsLastPage, tween) {
-        if(IsLastPage){
+        if (IsLastPage) {
             this.Resolve()
         }
     }
@@ -115,7 +118,7 @@ export default class TextBox {
 
     PageEnd() {
 
-        if (this.isLastPage) {
+        if (this.text_obj.isLastPage) {
             this.OnPageEnd(true);
             return;
         }
@@ -133,7 +136,9 @@ export default class TextBox {
         });
         this.OnPageEnd(false, tween);
     }
-      development = 'Phaser is a fast, free, and fun open source HTML5 game framework that offers WebGL and Canvas rendering across desktop and mobile web browsers. Games can be compiled to iOS, Android and native apps by using 3rd party tools. You can use JavaScript or TypeScript for development';
+
+    development = 'Phaser is a fast, free, and fun open source HTML5 game framework that offers WebGL and Canvas rendering across desktop and mobile web browsers. Games can be compiled to iOS, Android and native apps by using 3rd party tools. You can use JavaScript or TypeScript for development';
+
     getBuiltInText(scene, wrapWidth, fixedWidth, fixedHeight) {
 
         return this.scene.add.text(0, 0, development, {
@@ -175,24 +180,31 @@ export default class TextBox {
     }
 
     ClearText() {
-        this.page .clearText();
+        this.page.clearText();
     }
 
     AppendPage(content) {
-        this.page .appendPage(content);
+        this.page.appendPage(content);
     }
+
     SetText(text) {
 
-        this.page .setText(text);
+        this.page.setText(text);
     }
+
     AppendText(text) {
 
-        this.page .appendText(text);
+        this.page.appendText(text);
+    }
+
+    Say(text, speed = 50) {
+        return this.Show(text, speed)
+
     }
 
     Show(text, speed = 50) {
 
-        this.text_obj.start(text, speed);
+        const a = this.text_obj.start(text, speed);
         return new Promise((resolve, reject) => {
             this.resolve = resolve;
             this.reject = reject;

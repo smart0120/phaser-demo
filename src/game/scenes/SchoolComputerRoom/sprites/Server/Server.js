@@ -1,16 +1,16 @@
 
         import _Server from './images/Server.png'
-let paths = [
+                       let paths = [
         ['SchoolComputerRoom_Server', _Server, 21],
-      
+
     ]
 
       import {store} from "@/store";
- 
+
    export const event_file = require('./Server_events.js');
- 
- 
- 
+
+
+
 export default paths
 export let Items = () => paths.map(a => {
     return {Name: a[0], Id: a[2]}
@@ -27,4 +27,4 @@ export const Width = 273;
 export const Alpha = 1;
 export let Scale = 1;
 
- 
+

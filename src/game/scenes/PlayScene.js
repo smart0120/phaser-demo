@@ -7,7 +7,7 @@ import {Items} from "@/game/scenes/PianoPlay/sprites/ReglaDePerspectiva1/ReglaDe
 export default class PlayScene extends Scene {
     DebugText(eventname, point, sprite) {
 
-        this.triggerTextBox("DebugTextBox", "Default", {point, sprite})
+        //this.triggerTextBox("DebugTextBox", "Default", {point, sprite})
 
     }
 

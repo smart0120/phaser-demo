@@ -19,7 +19,7 @@ export default class SceneSpriteEvents {
     }
 
     PointerDoubleClick(Scene, Sprite, Payload) {
-        if (process.env.NODE_ENV !== "development")
+     //   if (process.env.NODE_ENV !== "development")
             return;
 
         try {

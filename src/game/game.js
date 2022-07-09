@@ -110,8 +110,8 @@ import SchoolRoof from
         "@/game/scenes/SchoolRoof/SchoolRoof";
 
 
-
 const sceneConfig = '@/game/scenes/index';
+import UIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
 
 function launch(containerId) {
     return new Phaser.Game({
@@ -119,7 +119,15 @@ function launch(containerId) {
         width: window.innerWidth * window.devicePixelRatio,
         height: window.innerHeight * window.devicePixelRatio,
         parent: containerId,
-
+        plugins: {
+            scene: [{
+                key: 'rexUI',
+                plugin: UIPlugin,
+                mapping: 'rexUI'
+            },
+                // ...
+            ]
+        },
         physics: {
             default: 'arcade',
             arcade: {
@@ -158,6 +166,8 @@ function launch(containerId) {
         ]
     })
 }
+
+
 
 export default launch
 export {launch}

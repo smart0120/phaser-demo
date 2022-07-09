@@ -9,13 +9,14 @@ function removeFirst(str) {
 
 export class DebugTextBoxTextBox extends TextBox {
 
-    Default(Scene, ClickCount, Payload) {
-
-       this.SetText("Sprite: " + removeFirst(Payload.sprite.texture.key))
-
+   async Default(Scene, ClickCount, Payload) {
+      //  this.ClearText()
+       this.AppendPage("Sprite: " + removeFirst(Payload.sprite.texture.key))
+       this.TypeNextPage();
     }
 
-    Default_Unique(Scene, ClickCount, Payload) {
-        this.Show();
+    async Default_Unique(Scene, Payload) {
+
+        this.SetText("Sprite: " + removeFirst(Payload.sprite.texture.key));
     }
 }

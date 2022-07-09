@@ -1,6 +1,7 @@
 import {Scene} from 'phaser'
 import {GetAllQuests, GetQuestSection, GetSetting, SetSetting, store} from "@/store";
 import {StopEventLoop} from "@/game/scenes/StopEventLoop";
+import {Items} from "@/game/scenes/PianoPlay/sprites/ReglaDePerspectiva1/ReglaDePerspectiva1";
 
 
 export default class PlayScene extends Scene {
@@ -79,9 +80,24 @@ export default class PlayScene extends Scene {
     }
 
     createSprite(item, SceneName = '') {
-        let {Name, Id, X, Y, Scale, Alpha, Visible, Interactive, MouseEvents} = item;
+        let {Name, Id, X, Y, Scale, Alpha, Visible, Interactive, MouseEvents,Items} = item;
 
         let sprite = this.add.sprite(X, Y, SceneName + "_" + Name);
+
+            for (const groupElement of item.default.slice(1)) {
+                this.anims.create({
+                    key: groupElement[0],
+                    frames: [
+                        { key: groupElement[0] }
+                    ],
+                    frameRate: 1,
+                    repeat: 0
+                });
+
+
+
+
+            }
         sprite.visible = Visible
         if (Interactive)
             sprite.setInteractive();
@@ -123,56 +139,10 @@ export default class PlayScene extends Scene {
         return sprite;
     }
 
-    createSpriteSheet(item, X, Y, Scale, Alpha, frameStart, frameEnd, fps, repeat) {
-        let {Name, Id} = item;
+    createSpriteSheet(item , SceneName = '') {
+      //  this.load.spritesheet(item.Name, item.default[0][1], { frameWidth: item.FrameWidth, frameHeight: item.FrameHeight });
+    //    const sprite = this.add.sprite(item.X, item.Y2)
 
-
-        this.anims.create({
-            key: Name,
-            frames: this.anims.generateFrameNumbers(Name, {start: frameStart, end: frameEnd}),
-            frameRate: fps,
-            repeat: repeat
-        });
-        const sprite = this.add.sprite(400, 300, Name)
-        sprite.play('explodeAnimation');
-        sprite.setInteractive();
-        sprite.scale = Scale;
-        sprite.alpha = Alpha
-        sprite.on(Phaser.Animations.Events.ANIMATION_START, function (anim, frame, gameObject) {
-
-
-        });
-        sprite.on(Phaser.Animations.Events.ANIMATION_STOP, function (anim, frame, gameObject) {
-
-
-        });
-
-        sprite.on(Phaser.Animations.Events.ANIMATION_UPDATE, function (anim, frame, gameObject) {
-
-
-        });
-
-        sprite.on(Phaser.Animations.Events.ANIMATION_REPEAT, function (anim, frame, gameObject) {
-
-
-        });
-
-        sprite.on(Phaser.Animations.Events.ANIMATION_COMPLETE, function (anim, frame, gameObject) {
-
-
-        });
-        sprite.on('pointerout', (pointer) => {
-            this.OnSpriteOut(sprite, pointer, Name, Id, GroupId)
-        })
-        sprite.on('pointerover', (pointer) => {
-
-            this.OnSpriteOver(sprite, pointer, Name, Id, GroupId)
-        });
-        sprite.on('pointerup', (pointer) => {
-
-            this.OnSpriteClick(sprite, pointer, Name, Id, GroupId)
-        });
-        this.Animations[Id] = sprite;
     }
 
     TextBoxes = []

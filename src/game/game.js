@@ -135,7 +135,8 @@ function launch(containerId) {
                 debug: false
             }
         },
-        scene: [PreloadVines, Vines,
+        scene: [   PreloadHomeKitchen, HomeKitchen,
+
             PreloadPianoPlay, PianoPlay,
             PreloadSchoolArtClass, SchoolArtClass,
             PreloadSchoolEnglishClassroom, SchoolEnglishClassroom,
@@ -152,7 +153,7 @@ function launch(containerId) {
             PreloadSchoolCafeteria, SchoolCafeteria,
             PreloadSchoolForestGlade, SchoolForestGlade,
             PreloadSchoolMusicClass, SchoolMusicClass,
-            PreloadHomeKitchen, HomeKitchen,
+            PreloadVines, Vines,
             PreloadSchool1WestCorridor, School1WestCorridor,
             PreloadSchoolClubroom, SchoolClubroom,
             PreloadSchoolGroundFloor, SchoolGroundFloor,
@@ -167,7 +168,7 @@ function launch(containerId) {
     })
 }
 
-
+//window.debug_sprites = true;
 
 export default launch
 export {launch}

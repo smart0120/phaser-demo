@@ -6,7 +6,8 @@ import {Items} from "@/game/scenes/PianoPlay/sprites/ReglaDePerspectiva1/ReglaDe
 
 export default class PlayScene extends Scene {
     DebugText(eventname, point, sprite) {
-
+        if (window.debug_sprites)
+            this.DebugTextBox.setText(sprite.texture.key)
         //this.triggerTextBox("DebugTextBox", "Default", {point, sprite})
 
     }
@@ -79,25 +80,27 @@ export default class PlayScene extends Scene {
 
     }
 
+    getSpritesByGroup(groupId) {
+        return this.SpriteList.filter(a => a.GroupId === groupId).map(a => a.sprite);
+    }
+
     createSprite(item, SceneName = '') {
-        let {Name, Id, X, Y, Scale, Alpha, Visible, Interactive, MouseEvents,Items} = item;
+        let {Name, Id, X, Y, Scale, Alpha, Visible, Interactive, MouseEvents, Items} = item;
 
         let sprite = this.add.sprite(X, Y, SceneName + "_" + Name);
 
-            for (const groupElement of item.default.slice(1)) {
-                this.anims.create({
-                    key: groupElement[0],
-                    frames: [
-                        { key: groupElement[0] }
-                    ],
-                    frameRate: 1,
-                    repeat: 0
-                });
+        for (const groupElement of item.default) {
+            const animation = this.anims.create({
+                key: groupElement[0].split("_").at(-1),
+                frames: [
+                    {key: groupElement[0]}
+                ],
+                frameRate: 1,
+                repeat: 0
+            });
 
 
-
-
-            }
+        }
         sprite.visible = Visible
         if (Interactive)
             sprite.setInteractive();
@@ -139,9 +142,9 @@ export default class PlayScene extends Scene {
         return sprite;
     }
 
-    createSpriteSheet(item , SceneName = '') {
-      //  this.load.spritesheet(item.Name, item.default[0][1], { frameWidth: item.FrameWidth, frameHeight: item.FrameHeight });
-    //    const sprite = this.add.sprite(item.X, item.Y2)
+    createSpriteSheet(item, SceneName = '') {
+        //  this.load.spritesheet(item.Name, item.default[0][1], { frameWidth: item.FrameWidth, frameHeight: item.FrameHeight });
+        //    const sprite = this.add.sprite(item.X, item.Y2)
 
     }
 
@@ -314,6 +317,7 @@ export default class PlayScene extends Scene {
         })
     }
 
+
     triggerSceneResume(oldScene) {
         this.scene.pause();
         this.scene.setVisible(false)
@@ -405,12 +409,25 @@ export default class PlayScene extends Scene {
     }
 
     create() {
+
         this.cameras.main.fadeIn(1000, 0, 0, 0)
         this.triggerCustomEvent("SceneCreated");
         this.input.on('pointermove', (pointer) => {
             if (this.SceneEvents["PointerMove"])
                 this.SceneEvents["PointerMove"].bind(this.SceneEvents)(this, pointer);
         });
+
+            this.DebugTextBox = this.add.text(10, 50, "Debug:", {
+                fontSize: '40px',
+                fontFamily: 'Arial',
+                color: '#ffffff',
+                align: 'center',
+                backgroundColor: '#640f64',
+
+            })
+            this.children.bringToTop(this.DebugTextBox)
+
+
     }
 
 

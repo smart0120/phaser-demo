@@ -244,7 +244,7 @@ export function EndQuest(QuestName, scene) {
 
 }
 
-export async function StartQuest(QuestName, scene, Section) {
+export async function StartQuest( scene, QuestName, Section) {
     await store.commit('SetQuestState', {QuestId: QuestName, QuestSection: Section, QuestState: EQuestState.Started})
     await scene.triggerQuestStart(QuestName)
 

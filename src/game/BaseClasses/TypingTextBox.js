@@ -198,6 +198,12 @@ export default class TextBox {
     }
 
     Say(text, speed = 50) {
+        return this.Show(text, speed)
+
+    }
+
+    Show(text, speed = 50) {
+
         const a = this.text_obj.start(text, speed);
         return new Promise((resolve, reject) => {
             this.resolve = resolve;
@@ -211,16 +217,6 @@ export default class TextBox {
 
     }
 
-    Show( ) {
-        if (this.resolve) {
-            this.resolve();
-
-            this.ShowEffect();
-        }
-        this.text_obj.visible = true;
-
-    }
-
     ShowEffect() {
 
     }
@@ -231,7 +227,7 @@ export default class TextBox {
 
             this.HideEffect();
         }
-        this.text_obj.visible = false;
+        this.group.visible = false;
     }
 
     HideEffect() {

@@ -1,1 +1,2 @@
- export const DebugTextBoxTextBox = require( "@/game/BaseClasses/DebugTextBox/DebugTextBox");
+export const JackyTextBox = require('./JackyTextBox/JackyTextBox')
+export const McTextBox = require('./McTextBox/McTextBox')

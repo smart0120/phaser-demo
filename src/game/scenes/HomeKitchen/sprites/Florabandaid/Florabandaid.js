@@ -1,16 +1,21 @@
+import _FlorabandaidXrayFull
+    from "@/game/scenes/HomeKitchen/sprites/FlorabandaidXrayFull/images/FlorabandaidXrayFull.png";
+import _FlorabandaidXray from "@/game/scenes/HomeKitchen/sprites/FlorabandaidXray/images/FlorabandaidXray.png";
+import _Florabandaid from './images/Florabandaid.png'
 
-        import _Florabandaid from './images/Florabandaid.png'
 let paths = [
         ['HomeKitchen_Florabandaid', _Florabandaid, 57],
-      
+    ['HomeKitchen_FlorabandaidXray', _FlorabandaidXray, 56],
+    ['HomeKitchen_FlorabandaidXrayFull', _FlorabandaidXrayFull, 55],
     ]
 
-      import {store} from "@/store";
- 
+
+
+
    export const event_file = require('./Florabandaid_events.js');
- 
- 
- 
+
+
+
 export default paths
 export let Items = () => paths.map(a => {
     return {Name: a[0], Id: a[2]}
@@ -27,4 +32,4 @@ export const Width = 242;
 export const Alpha = 1;
 export let Scale = 1;
 
- 
+

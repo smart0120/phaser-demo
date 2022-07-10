@@ -95,7 +95,7 @@ export default class PlayScene extends Scene {
             if(prefix >=0){
                 key = key.slice(prefix+1);
             }
-            debugger;
+
             const animation = this.anims.create({
                 key:key,
                 frames: [

@@ -9,9 +9,11 @@ export default class ConversationSequence {
 
     FadeIn(sprite_name) {
         const sprite = this.Sprites[sprite_name];
+        sprite.alpha = 0;
+
         return this.animatetweens(this.Scene, sprite, [{
             alpha: 1,
-            duration: 3000,
+            duration: 500,
             targets: sprite,
             ease: 'Power2'
         }]);
@@ -29,7 +31,7 @@ export default class ConversationSequence {
 
         return this.animatetweens(this.Scene, sprite, [{
             alpha: 0,
-            duration: 3000,
+            duration: 500,
             targets: sprite,
             ease: 'Power2'
         }]);

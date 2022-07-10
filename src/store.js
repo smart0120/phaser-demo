@@ -221,7 +221,7 @@ export function GetQuestCompleted(QuestName) {
     return store.getters.GetQuestCompleted(QuestName)
 }
 
-export function GetSetting(SettingName, QuestId = "Default", defaultValue) {
+export function GetSetting(SettingName, defaultValue, QuestId = "Default") {
     const val = store.getters.GetQuestValue(QuestId, SettingName)
     return val === undefined ? defaultValue : val;
 }

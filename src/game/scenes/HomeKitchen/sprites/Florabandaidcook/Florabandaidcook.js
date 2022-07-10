@@ -18,7 +18,7 @@ export let Items = () => paths.map(a => {
 export const Name = "Florabandaidcook"
 export const Id = 22;
 export const GroupId = "-1,0,1,2"
-export const Visible = true
+export const Visible = false
 export const X = 757;
 export const Y = 386;
 export const Height = 213;

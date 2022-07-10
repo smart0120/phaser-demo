@@ -1,0 +1,14 @@
+import TextBox from "@/game/BaseClasses/TextBox";
+
+
+
+export class TbJackylnTextBox extends TextBox {
+
+   async Default(Scene, ClickCount, Payload) {
+
+    }
+
+    async Default_Unique(Scene, Payload) {
+
+    }
+}

@@ -156,6 +156,7 @@ export default class PlayScene extends Scene {
         let {Name, Id, X, Y, FontFamily, TextClass, Interactive, EventsData} = item;
 
         const text_box = new TextClass(this, item);
+
         this.TextBoxes.push({text_box: text_box, Name: Name, Item: item})
     }
 
@@ -199,7 +200,7 @@ export default class PlayScene extends Scene {
         const TimeLine = this.tweens.timeline(tween);
         return new Promise((resolve, reject) => {
             TimeLine.on('stop', () => {
-                alert("done")
+
                 resolve(...arguments);
             })
         })
@@ -272,6 +273,12 @@ export default class PlayScene extends Scene {
 
     triggerQuestStart(QuestName) {
         this.triggerCustomEvent("Started", QuestName)
+    }
+
+    getTextBoxByName(name) {
+        let found = this.TextBoxes.find(a => a.Name === name);
+        if (!found) return undefined;
+        return found.text_box;
     }
 
     getSpriteByName(name) {

@@ -19,7 +19,7 @@ export default class SceneSpriteEvents {
     }
 
     PointerDoubleClick(Scene, Sprite, Payload) {
-        if (process.env.NODE_ENV !== "development")
+
             return;
 
         try {
@@ -52,8 +52,7 @@ export default class SceneSpriteEvents {
 
     SceneCreated(Scene, Sprite, Payload) {
 
-        if (process.env.NODE_ENV !== "development")
-            return;
+
         this.cursorKeys = Scene.input.keyboard.createCursorKeys();
         this.lastClick = 0
 
@@ -61,9 +60,7 @@ export default class SceneSpriteEvents {
 
     SceneFinished(Scene, Sprite, Payload) {
 
-        if (process.env.NODE_ENV !== "development")
-            return;
-        this.cursorKeys.destroy()
+
     }
 
 

@@ -21,7 +21,9 @@ export default class TextBox {
             fixedWidth: 500,
             fixedHeight: 65,
           x:  item.X,y:item.Y,
-        }).start(this.text, 50)
+        })
+        this.text_obj.fadeOut(1)
+
         this.page = this.text_obj.page
     }
 
@@ -137,19 +139,7 @@ export default class TextBox {
         this.OnPageEnd(false, tween);
     }
 
-    development = 'Phaser is a fast, free, and fun open source HTML5 game framework that offers WebGL and Canvas rendering across desktop and mobile web browsers. Games can be compiled to iOS, Android and native apps by using 3rd party tools. You can use JavaScript or TypeScript for development';
 
-    getBuiltInText(scene, wrapWidth, fixedWidth, fixedHeight) {
-
-        return this.scene.add.text(0, 0, development, {
-            fontSize: '20px',
-            wordWrap: {
-                width: wrapWidth
-            },
-            maxLines: 3
-        })
-            .setFixedSize(fixedWidth, fixedHeight);
-    }
 
     getBBcodeText(wrapWidth, fixedWidth, fixedHeight) {
         const bbcode = this.scene.rexUI.add.BBCodeText(0, 0, '', {
@@ -215,27 +205,32 @@ export default class TextBox {
         if (this.resolve) {
             this.resolve();
 
-            this.ShowEffect();
+
         }
-        this.text_obj.visible = true;
+        this.ShowEffect();
+
+        this.text_obj.start(this.text, 50)
 
     }
 
     ShowEffect() {
-
+        this.text_obj.fadeIn(50)
     }
 
     Hide() {
         if (this.resolve) {
             this.resolve();
 
-            this.HideEffect();
+
         }
-        this.text_obj.visible = false;
+        this.HideEffect();
+
+
     }
 
     HideEffect() {
 
+        this.text_obj.fadeOut(50)
     }
 
     NextEffect() {

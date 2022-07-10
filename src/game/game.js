@@ -168,7 +168,7 @@ function launch(containerId) {
     })
 }
 
-//window.debug_sprites = true;
+window.debug_sprites = true;
 
 export default launch
 export {launch}

@@ -2,15 +2,15 @@
         import _Flora from './images/Flora.png'
 let paths = [
         ['HomeKitchen_Flora', _Flora, 48],
-      
+
     ]
 
       import {store} from "@/store";
- 
+
    export const event_file = require('./Flora_events.js');
- 
- 
- 
+
+
+
 export default paths
 export let Items = () => paths.map(a => {
     return {Name: a[0], Id: a[2]}
@@ -18,7 +18,7 @@ export let Items = () => paths.map(a => {
 export const Name = "Flora"
 export const Id = 22;
 export const GroupId = "-1,0,1,2"
-export const Visible = true
+export const Visible = false
 export const X = 757;
 export const Y = 371;
 export const Height = 228;
@@ -27,4 +27,4 @@ export const Width = 154;
 export const Alpha = 1;
 export let Scale = 1;
 
- 
+

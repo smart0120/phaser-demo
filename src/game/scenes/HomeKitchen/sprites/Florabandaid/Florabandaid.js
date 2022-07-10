@@ -4,16 +4,13 @@ import _FlorabandaidXray from "@/game/scenes/HomeKitchen/sprites/FlorabandaidXra
 import _Florabandaid from './images/Florabandaid.png'
 
 let paths = [
-        ['HomeKitchen_Florabandaid', _Florabandaid, 57],
+    ['HomeKitchen_Florabandaid', _Florabandaid, 57],
     ['HomeKitchen_FlorabandaidXray', _FlorabandaidXray, 56],
     ['HomeKitchen_FlorabandaidXrayFull', _FlorabandaidXrayFull, 55],
-    ]
+]
 
 
-
-
-   export const event_file = require('./Florabandaid_events.js');
-
+export const event_file = require('./Florabandaid_events.js');
 
 
 export default paths
@@ -27,7 +24,7 @@ export const Visible = true
 export const X = 1022;
 export const Y = 439;
 export const Height = 542;
-export const Interactive= true
+export const Interactive = true
 export const Width = 242;
 export const Alpha = 1;
 export let Scale = 1;

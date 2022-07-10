@@ -130,4 +130,11 @@ If you need to delete a sprite, delete the folder and the references to it in `P
 
 If you need to reorder sprites, reorder them in the array in the main file.
 
+```javascript
+
+SaveGame NewGame and LoadGame exist. Use with caution. 
+
+can eventually hook up to back end
+```
+
 

@@ -90,8 +90,14 @@ export default class PlayScene extends Scene {
         let sprite = this.add.sprite(X, Y, SceneName + "_" + Name);
 
         for (const groupElement of item.default) {
+            let key =  groupElement[0];
+            const prefix = key.indexOf('_');
+            if(prefix >=0){
+                key = key.slice(prefix+1);
+            }
+            debugger;
             const animation = this.anims.create({
-                key: groupElement[0].split("_").at(-1),
+                key:key,
                 frames: [
                     {key: groupElement[0]}
                 ],

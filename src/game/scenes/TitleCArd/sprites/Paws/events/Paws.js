@@ -5,7 +5,7 @@ export const exportClass = class _PawsDefaultSceneEvents extends SceneSpriteEven
     PointerUp(Scene, Sprite, Payload) {
         super.PointerUp(Scene, Sprite, Payload);
         NewGame(Scene).then(()=>{
-            scene.triggerSceneChange("preload_HomeKitchen")
+
         })
 
     }

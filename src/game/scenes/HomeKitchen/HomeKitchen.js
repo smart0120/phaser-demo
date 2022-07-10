@@ -1,7 +1,7 @@
 
 const TextBoxesx= require('./textboxes/index.js')
 const TextBoxes = Object.keys(TextBoxesx).map(a=>TextBoxesx[a]);
- 
+
 import PlayScene from '@/game/scenes/PlayScene'
     const EventsData = require('./sceneevents/HomeKitchen.js');
             const _Kitchen = require( './sprites/Kitchen/Kitchen')
@@ -83,20 +83,30 @@ const _JacklynXrayFull = require( './sprites/JacklynXrayFull/JacklynXrayFull')
 const _JacklynXray = require( './sprites/JacklynXray/JacklynXray')
 const _Jacklyn = require( './sprites/Jacklyn/Jacklyn')
 const _Nightoverlay = require( './sprites/Nightoverlay/Nightoverlay')
-            const SpriteNames = [_Kitchen,_Nightwindow,_Carpets,_Furniture03,_Closet,_D3,_D1,_S1,_Cupboard,_C1,_Door,_Stove,_Pot,_Lights,_Furniture01,_D2,_Counter,_MF,_Barstool2,_Barstool1,_VariousBack,_KettleStove,_Kettle,_VariousFront,_SauceLeft,_Plant,_PlantRight,_Stairs,_TrailKitchen,_Clock,_Squid,_Smoke,_LindseyXrayFull,_LindseyXray,_Lindsey,_Pants,_Spilledflour,_Fire,_Tippedsquid,_Glassescase,_FlorapainXrayFull,_FlorapainXray,_Florapain,_FlorabandaidcookXrayFull,_Florabandaidcook,_FloraXrayFull,_FloraXray,_Flora,_Bandaid,_Waterbottle,_Crouton,_FlorasittingXrayFull,_FlorasittingXray,_Florasitting,_FlorabandaidXrayFull,_FlorabandaidXray,_Florabandaid,_JonewsXrayFull,_JonewsXray,_Jonews,_JocounterXrayFull,_JocounterXray,_Jocounter,_JocounterXrayBraless,_JocounterBraless,_Onion,_LampKettle,_Smokekettle,_Package,_Sugarcube8,_Sugarcube9,_Sugarcube10,_Dollar1,_Dollar2,_Dollar3,_JacklynXrayFull,_JacklynXray,_Jacklyn,_Nightoverlay]
-            
+
+
+
+
+
+
+             const _Flora_Clothed = require( './sprites/Flora_Clothed/Flora_Clothed')
+
+
+
+const SpriteNames = [_Kitchen,_Nightwindow,_Carpets,_Furniture03,_Closet,_D3,_D1,_S1,_Cupboard,_C1,_Door,_Stove,_Pot,_Lights,_Furniture01,_D2,_Counter,_MF,_Barstool2,_Barstool1,_VariousBack,_KettleStove,_Kettle,_VariousFront,_SauceLeft,_Plant,_PlantRight,_Stairs,_TrailKitchen,_Clock,_Squid,_Smoke,_LindseyXrayFull,_LindseyXray,_Lindsey,_Pants,_Spilledflour,_Fire,_Tippedsquid,_Glassescase,_FlorapainXrayFull,_FlorapainXray,_Florapain,_FlorabandaidcookXrayFull,_Florabandaidcook,_FloraXrayFull,_FloraXray,_Flora,_Bandaid,_Waterbottle,_Crouton,_FlorasittingXrayFull,_FlorasittingXray,_Florasitting,_FlorabandaidXrayFull,_FlorabandaidXray,_Florabandaid,_JonewsXrayFull,_JonewsXray,_Jonews,_JocounterXrayFull,_JocounterXray,_Jocounter,_JocounterXrayBraless,_JocounterBraless,_Onion,_LampKettle,_Smokekettle,_Package,_Sugarcube8,_Sugarcube9,_Sugarcube10,_Dollar1,_Dollar2,_Dollar3,_JacklynXrayFull,_JacklynXray,_Jacklyn,_Nightoverlay, _Flora_Clothed]
+
             export default class HomeKitchen extends PlayScene{
-      
+
             constructor(){
-                super('HomeKitchen')  
+                super('HomeKitchen')
                 this.SceneEvents = new EventsData.default();
             }
                 create(){
-             
-                if(this.SpriteList.length !==0)                       
+
+                if(this.SpriteList.length !==0)
                   this.SpriteList.splice(0,this.SpriteList.length);
-           
-                
+
+
                 for(const sprite_name of SpriteNames){
                         this.createSprite(sprite_name,'HomeKitchen');
                 }
@@ -105,7 +115,7 @@ const _Nightoverlay = require( './sprites/Nightoverlay/Nightoverlay')
                     }
  super.create();
                 }
-                
 
-            
+
+
         }

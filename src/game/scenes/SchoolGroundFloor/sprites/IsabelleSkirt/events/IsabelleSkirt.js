@@ -1,20 +1,11 @@
 import SceneSpriteEvents from "@/game/BaseClasses/SceneSpriteEvents";
-import {IsaBelleGroundFloorDefault} from "@/game/scenes/SchoolGroundFloor/ConversationSequences/Default/IsaBelleGroundFloorDefault";
-import ConversationSequence from "@/game/BaseClasses/conversationSequence";
+import {IsaBelleGroundFloorDefault,Setup} from "@/game/scenes/SchoolGroundFloor/ConversationSequences/Default/IsaBelleGroundFloorDefault";
+
 
 export const exportClass = class _IsabelleSkirtDefaultSceneEvents extends SceneSpriteEvents {
     PointerUp(Scene, Sprite, Payload) {
         super.PointerUp(Scene, Sprite, Payload);
-        const sprites = {
-            'IsabelleSkirt': Sprite
-        }
-
-        const tb = {
-            "McTextBox": Scene.getTextBoxByName("TbMc"),
-            "TbIsabelleSkirt": Scene.getTextBoxByName("TbIsabelleSkirt")
-        };
-
-        IsaBelleGroundFloorDefault(new ConversationSequence(Scene,sprites,tb))
+        IsaBelleGroundFloorDefault(Setup(Scene))
     }
 }
 export default exportClass

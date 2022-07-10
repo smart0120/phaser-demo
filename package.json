@@ -7,8 +7,10 @@
     "serve": "vue-cli-service serve --port 9999",
     "build": "vue-cli-service build",
     "start": "http-server dist --port=9999",
-    "generate_event": "node Scaffolder/CreateQuest.js",
-    "generate_textbox": "node Scaffolder/CreateTextbox.js"
+    "CreateQuest": "node Scaffolder/CreateQuest.js",
+    "CreateSprite": "node Scaffolder/CreateSprite.js",
+    "AddFramesToSprite": "node Scaffolder/AddFramesToSprite.js",
+    "CreateTextBox": "node Scaffolder/CreateTextbox.js"
   },
   "dependencies": {
     "@headlessui/vue": "^1.6.5",

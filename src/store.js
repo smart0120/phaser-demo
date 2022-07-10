@@ -34,12 +34,20 @@ export class QuestState {
 }
 
 export class PlayerGameSave extends PlayerSave {
+    constructor(partial) {
+        super();
+        if (partial) {
+            Object.assign(this, partial);
+        }
+    }
+
     ActiveQuestStates = [new QuestState({QuestId: "Default", QuestState: EQuestState.Started, QuestSection: "Started"})]
     FinishedQuestStates = []
     PausedQuestStates = []
     FailedQuestStates = []
-    All(){
-        return [this.FinishedQuestStates,this.PausedQuestStates,this.FailedQuestStates,this.ActiveQuestStates].flat();
+
+    All() {
+        return [this.FinishedQuestStates, this.PausedQuestStates, this.FailedQuestStates, this.ActiveQuestStates].flat();
     }
 }
 
@@ -108,6 +116,15 @@ export const store = createStore({
             }
             qstate.QuestParameters[options.Name] = options.QuestValue;
 
+        },
+        NewGame(state) {
+            state.PlayerSave = new PlayerGameSave();
+        },
+        LoadGame(state) {
+            state.PlayerSave = new PlayerGameSave(JSON.parse(localStorage.getItem("SaveGame1")));
+        },
+        SaveGame(state) {
+            localStorage.setItem("SaveGame1", JSON.stringify(state.PlayerSave))
         },
         SetQuestValue(state, options = {QuestId: -1, Value: {}, Name: ''}) {
             let qstate = state.PlayerSave.All().find(a => a.QuestId === options.QuestId);
@@ -213,9 +230,11 @@ export function GetQuestCreated(QuestName) {
 
     return store.getters.GetQuestCreated(QuestName)
 }
- export function GetAllQuests(){
+
+export function GetAllQuests() {
     return store.getters.GetAllQuests();
- }
+}
+
 export function GetQuestCompleted(QuestName) {
 
     return store.getters.GetQuestCompleted(QuestName)
@@ -226,10 +245,16 @@ export function GetSetting(SettingName, defaultValue, QuestId = "Default") {
     return val === undefined ? defaultValue : val;
 }
 
+export async function NewGame(Scene) {
+    store.commit("NewGame")
+    Scene.triggerSceneChange("preload_HomeKitchen");
+
+}
+
 export async function SetSetting(SettingName, SettingValue, Scene, QuestId = "Default") {
     await store.commit('SetQuestValue', {QuestId: QuestId, Value: SettingValue, Name: SettingName})
 
-    Scene.triggerCustomEvent("QuestSettingsUpdate_" + SettingName, QuestId,SettingValue)
+    Scene.triggerCustomEvent("QuestSettingsUpdate_" + SettingName, QuestId, SettingValue)
 }
 
 export function FailQuest(QuestName, scene) {
@@ -244,7 +269,7 @@ export function EndQuest(QuestName, scene) {
 
 }
 
-export async function StartQuest( scene, QuestName, Section) {
+export async function StartQuest(scene, QuestName, Section) {
     await store.commit('SetQuestState', {QuestId: QuestName, QuestSection: Section, QuestState: EQuestState.Started})
     await scene.triggerQuestStart(QuestName)
 

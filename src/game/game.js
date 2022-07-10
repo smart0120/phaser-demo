@@ -112,6 +112,8 @@ import SchoolRoof from
 
 const sceneConfig = '@/game/scenes/index';
 import UIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
+import PreloadTitleCArd from "@/game/scenes/TitleCArd/PreloadTitleCArd";
+import TitleCArd from "@/game/scenes/TitleCArd/TitleCArd";
 
 function launch(containerId) {
     return new Phaser.Game({
@@ -135,7 +137,7 @@ function launch(containerId) {
                 debug: false
             }
         },
-        scene: [   PreloadHomeKitchen, HomeKitchen,
+        scene: [ PreloadTitleCArd,TitleCArd,  PreloadHomeKitchen, HomeKitchen,
 
             PreloadPianoPlay, PianoPlay,
             PreloadSchoolArtClass, SchoolArtClass,

@@ -83,18 +83,15 @@ readline.question(`What is the scene name:`, scene => {
 
 
 function ModifySpriteFrame(spriteFile, name, scene, sprite_name) {
-    const importStatement = `import  _${name} from './images/${name}.png'
+    let importStatement = `import  _${name} from './images/${name}.png'
  `
-    const frame = ` ['${scene}_${sprite_name}_${name}',_${name},0] `
+    let frame = ` ['${scene}_${sprite_name}_${name}',_${name},0] `
     const sprite_file_data = fs.readFileSync(spriteFile, 'utf-8');
-    if (sprite_file_data.indexOf(`import  _${name} `) >= 0) {
-        console.log("Modify Sprite exists " + name)
-        return;
-    }
     const pathfinder = sprite_file_data.indexOf('let paths')
     let delimiter = ",";
-    const StartOfArrayIndex = sprite_file_data.indexOf("[", pathfinder);
+
     const exportStatement = sprite_file_data.indexOf("export", pathfinder);
+    const StartOfArrayIndex = sprite_file_data.indexOf("[", pathfinder);
     let SecondEndOfArrayIndex = -1;
     for (let i = exportStatement; i >= 0; i--) {
         if (sprite_file_data[i] === ']') {
@@ -106,11 +103,22 @@ function ModifySpriteFrame(spriteFile, name, scene, sprite_name) {
         console.log("Malformed file");
         return;
     }
-
-
     const existing = sprite_file_data.slice(StartOfArrayIndex + 1, SecondEndOfArrayIndex);
-    if (existing.trim().length === 0)
+    if (existing.trim().length === 0) {
         delimiter = ""
+          importStatement = `import  _${sprite_name} from './images/${name}.png'
+ `
+          frame = ` ['${scene}_${sprite_name}',_${sprite_name},0] `
+    }
+    if (sprite_file_data.indexOf(`import  _${name} `) >= 0) {
+        console.log("Modify Sprite exists " + name)
+        return;
+    }
+
+
+
+
+
     let before = sprite_file_data.slice(0, SecondEndOfArrayIndex);
     let after = sprite_file_data.slice(SecondEndOfArrayIndex);
     const newSpritefont = importStatement + before + delimiter + frame + after;

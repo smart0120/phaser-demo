@@ -4,9 +4,15 @@ import ConversationSequence from "@/game/BaseClasses/conversationSequence";
 
 
 export const exportClass = class _FlorabandaidDefaultSceneEvents extends SceneSpriteEvents {
+
+    QuestSettingsUpdate_bug_count(QuestName, SettingValue) {
+    debugger;
+    }
+
+
     PointerUp(Scene, Sprite, Payload) {
         super.PointerUp(Scene, Sprite, Payload);
-
+        SetSetting("bug_count",5,Scene)
         const sprites = {
             'Florabandaid': Scene.getSpriteByName('Florabandaid')
         }

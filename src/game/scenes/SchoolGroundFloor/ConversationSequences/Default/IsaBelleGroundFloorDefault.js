@@ -1,6 +1,6 @@
 
 
-export async function LindsayGroundFloorDefault(convo) {
+export async function IsaBelleGroundFloorDefault(convo) {
     await convo.Start(50)
     await convo.Say("McTextBox","hi sexy ");
     await convo.Say("TbIsabelleSkirt","hi");

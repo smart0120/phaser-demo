@@ -1,5 +1,5 @@
 import SceneSpriteEvents from "@/game/BaseClasses/SceneSpriteEvents";
-import {LindsayGroundFloorDefault} from "@/game/scenes/SchoolGroundFloor/ConversationSequences/Default/LindseyIntro";
+import {IsaBelleGroundFloorDefault} from "@/game/scenes/SchoolGroundFloor/ConversationSequences/Default/IsaBelleGroundFloorDefault";
 import ConversationSequence from "@/game/BaseClasses/conversationSequence";
 
 export const exportClass = class _IsabelleSkirtDefaultSceneEvents extends SceneSpriteEvents {
@@ -14,7 +14,7 @@ export const exportClass = class _IsabelleSkirtDefaultSceneEvents extends SceneS
             "TbIsabelleSkirt": Scene.getTextBoxByName("TbIsabelleSkirt")
         };
 
-        LindsayGroundFloorDefault(new ConversationSequence(Scene,sprites,tb))
+        IsaBelleGroundFloorDefault(new ConversationSequence(Scene,sprites,tb))
     }
 }
 export default exportClass

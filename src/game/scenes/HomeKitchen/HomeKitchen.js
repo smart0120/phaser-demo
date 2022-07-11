@@ -105,7 +105,8 @@ const SpriteNames = [_Kitchen,_Nightwindow,_Carpets,_Furniture03,_Closet,_D3,_D1
 
                 if(this.SpriteList.length !==0)
                   this.SpriteList.splice(0,this.SpriteList.length);
-
+                    if(this.TextBoxes.length !==0)
+                        this.TextBoxes.splice(0,this.TextBoxes.length);
 
                 for(const sprite_name of SpriteNames){
                         this.createSprite(sprite_name,'HomeKitchen');

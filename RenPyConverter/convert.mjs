@@ -102,7 +102,17 @@ export class AvatarStatement extends Statement {
         }
     }
 }
+export class PauseStatement extends Statement {
+    ConvertToJavascript() {
+        super.ConvertToJavascript();
+        const items = this.Line.trim().split(' ');
+        if(items.length === 2){
+            return `convo.Pause(${items[1]})`
+        }
+        return "// coming soon " + this.Line;
 
+    }
+}
 export class JumpStatement extends Statement {
 
 }

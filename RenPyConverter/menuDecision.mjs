@@ -44,19 +44,10 @@ export default class MenuDecision extends StatementBlock {
         return this.GetMenuText().replace(/[^A-Za-z]/g, '').toUpperCase()
     }
 
-    GetAsClassDefinition() {
-        const menu_condition = this.GetMenuTextAsClassName();
-        const block = this.Statements.map(a => a.ConvertToJavascript()).join("\n")
-        return `export default class ${this.GetMenuTextAsClassName()}MenuDecision()  extends MenuDecision{
-            Exec(convo){
-                    ${block}
-            }
-        }`;
-    }
 
     ConvertToJavascript() {
-        console.log(this.GetAsClassDefinition())
-        return `new ${this.GetMenuTextAsClassName()}MenuDecision()`
+        const block = this.Statements.map(a => a.ConvertToJavascript()).join("\n")
+        return `new MenuDecision('${this.GetMenuText()}', () => {${block}})`
     }
 }
 

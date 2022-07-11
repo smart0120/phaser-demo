@@ -9,7 +9,7 @@ import {
     IfStatement,
     LabelStatement,
     lowerCase,
-    MenuStatement, QuestStatement,
+    MenuStatement, PauseStatement, QuestStatement,
     ReturnStatement, ShowStatement, TextStatement
 } from "./convert.mjs";
 
@@ -77,8 +77,13 @@ export default function parseStatement(parsed_lines, i) {
         return {j: i + 1, statement: showStatement}
     }
     if (trimmed_line.startsWith('extend')) {
-        let   extendStatement = new ExtendStatement(parsedLine);
-        return parseStatement(parsed_lines, i+1)
+        let extendStatement = new ExtendStatement(parsedLine);
+        return parseStatement(parsed_lines, i + 1)
+
+    }
+    if (trimmed_line.startsWith('pause')) {
+        let pauseStatement = new PauseStatement(parsedLine);
+        return {j: i + 1, statement: pauseStatement}
 
     }
     if (trimmed_line.startsWith('$quest')) {

@@ -20,12 +20,12 @@ export default class SceneSpriteEvents {
 
     PointerDoubleClick(Scene, Sprite, Payload) {
 
-            return;
+        return;
 
         try {
             let input = "http://localhost:9998/scenes/" + Scene.SceneName + "/sprites/" + Sprite.Name + "/" + Sprite.Name + ".js";
             if (this.cursorKeys.space.isDown) {
-                input+="?visible";
+                input += "?visible";
             }
             if (this.cursorKeys.shift.isDown) {
                 input = "http://localhost:9998/scenes/" + Scene.SceneName + "/sprites/" + Sprite.Name + "/events/" + Sprite.Name + ".js";
@@ -41,7 +41,6 @@ export default class SceneSpriteEvents {
     }
 
     PointerUp(Scene, Sprite, Payload) {
-
 
 
     }
@@ -86,7 +85,18 @@ export const SceneEvents = class SceneEvents {
     }
 
     SceneFinished(Scene, payload) {
-
+        Scene.TextBoxes.forEach((a) => {
+            a.text_box = undefined
+            a.Name = undefined
+            a.Item = undefined
+        });
+        Scene.SpriteList.forEach((a) => {
+            Object.keys(a).forEach(b => {
+                a[b] = undefined;
+            })
+        });
+        Scene.TextBoxes.clear();
+        Scene.SpriteList.clear()
     }
 
     //SomeCustomEvent
